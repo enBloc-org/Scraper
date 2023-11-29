@@ -1,0 +1,14 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": "kentcdodds",
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "ignorePatterns": [".env", "node_modules/", ".husky/", "*.json"],
+    "rules": {
+    }
+}
