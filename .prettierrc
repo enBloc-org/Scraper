@@ -3,6 +3,5 @@
   "singleQuote": false,
   "arrowParens": "avoid",
   "bracketSpacing": true,
-  "jsxBracketSameLine": false,
   "printWidth": 80
 }
