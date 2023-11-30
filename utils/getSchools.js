@@ -78,7 +78,7 @@ const getSchools = async givenDistrict => {
       try {
         console.groupCollapsed(
           thirdLogColour,
-          `Processing ${currentBlock.eduBlockId}`,
+          `Processing ${currentBlock.eduBlockName}`,
         )
 
         const processedBlock = schoolFetch(stateId, currentBlock)
