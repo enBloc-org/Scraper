@@ -1,3 +1,3 @@
-const {getDistricts} = require('./utils/getDistricts.js')
+const { getDistricts } = require("./utils/getDistricts.js")
 
 getDistricts()

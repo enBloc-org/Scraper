@@ -6,4 +6,10 @@ const bgLogColour = "\u001b[37;44m"
 
 const errorLogColour = "\u001b[31m"
 
-module.exports = {firstLogColour, secondLogColour, thirdLogColour, bgLogColour, errorLogColour}
+module.exports = {
+  firstLogColour,
+  secondLogColour,
+  thirdLogColour,
+  bgLogColour,
+  errorLogColour,
+}
