@@ -77,9 +77,8 @@ const getDistricts = async () => {
         )
         throw error
       }
-
-      // recursive call command
     }
+    // recursive call command
     await processSingleState(0)
   } catch (error) {
     console.error(errorLogColour, `Error iterating through States: ${error}`)
