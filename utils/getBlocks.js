@@ -2,16 +2,14 @@ require("dotenv").config()
 
 const {
   errorLogColour,
-  firstLogColour,
   secondLogColour,
   thirdLogColour,
-  bgLogColour,
 } = require("./colours.js")
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
-const { insertStates, selectStates } = require("../model/states.js")
+const delayInterval = process.env.DELAY
 
-const delayInterval = 1000
+const { getSchools } = require("./getSchools.js")
 
 // Fetch Call to the endpoint in each District
 const blockFetch = async givenDistrict => {
@@ -28,6 +26,7 @@ const blockFetch = async givenDistrict => {
 
     const response = await fetch(
       `${baseURL}/locateSchool/getBlock?districtId=${givenDistrictId}`,
+      options,
     )
     const parsedResponse = await response.json()
 
@@ -67,11 +66,12 @@ const getBlocks = async currentState => {
       try {
         console.groupCollapsed(
           secondLogColour,
-          `Processeding ${currentDistrict.districtName} District`,
+          `Processing ${currentDistrict.districtName} District`,
         )
 
-        const processedDistrict = await blockFetch(currentDistrict)
-        newDistricts.push(processedDistrict)
+        const districtWithBlocks = await blockFetch(currentDistrict)
+        const districtWithSchools = await getSchools(districtWithBlocks)
+        newDistricts.push(districtWithSchools)
 
         console.groupEnd()
 
