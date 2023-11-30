@@ -1,11 +1,10 @@
 require("dotenv").config("")
 
-const { firstLogColour, errorLogColour } = require("./colours.js")
+const { firstLogColour, errorLogColour, bgLogColour } = require("./colours.js")
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
-let states = JSON.parse(process.env.STATE_LIST).filter(
-  state => state.stateId === 135 || state.stateId === 128,
-)
+let states = JSON.parse(process.env.STATE_LIST)
+const { insertStates } = require("../model/states.js")
 
 const delayInterval = 1000
 
@@ -56,8 +55,8 @@ const getDistricts = async () => {
       // base case
       if (index >= states.length) {
         const newStatesJSON = JSON.stringify(newStates)
-        // insertStates(newStatesJSON)
-        console.dir(newStates)
+        insertStates(newStatesJSON)
+        console.log(bgLogColour, "States Object saved to DB")
         return
       }
 
