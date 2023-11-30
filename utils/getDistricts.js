@@ -3,8 +3,12 @@ require("dotenv").config("")
 const { firstLogColour, errorLogColour, bgLogColour } = require("./colours.js")
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
-let states = JSON.parse(process.env.STATE_LIST)
+let states = JSON.parse(process.env.STATE_LIST).filter(
+  state => state.stateId === 135,
+)
 const { insertStates } = require("../model/states.js")
+
+const { getBlocks } = require("./getBlocks.js")
 
 const delayInterval = 1000
 
@@ -64,8 +68,10 @@ const getDistricts = async () => {
       const currentState = states[index]
 
       try {
-        const result = await districtFetch(currentState)
-        newStates.push(result)
+        const stateWithDistricts = await districtFetch(currentState)
+        const stateWithBlocks = await getBlocks(stateWithDistricts)
+        // const stateWithSchools = await getSchools(stateWithBlocks)
+        newStates.push(stateWithBlocks)
 
         setTimeout(async () => {
           await processSingleState(index + 1)

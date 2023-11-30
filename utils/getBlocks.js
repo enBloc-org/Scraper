@@ -11,8 +11,6 @@ const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
 const { insertStates, selectStates } = require("../model/states.js")
 
-const jsonStates = selectStates(1)
-const states = JSON.parse(jsonStates.states_file)
 const delayInterval = 1000
 
 // Fetch Call to the endpoint in each District
@@ -49,7 +47,7 @@ const blockFetch = async givenDistrict => {
 }
 
 // Iterate through all Districts in a State
-const iterateDistricts = async currentState => {
+const getBlocks = async currentState => {
   try {
     const newDistricts = []
 
@@ -81,7 +79,7 @@ const iterateDistricts = async currentState => {
           setTimeout(async () => {
             const result = await processSingleDistrict(index + 1)
             resolve(result)
-          }, delayInterval)
+          }, delayInterval / 2)
         })
         return result
       } catch (error) {
@@ -100,54 +98,6 @@ const iterateDistricts = async currentState => {
       errorLogColour,
       `Error processing ${givenDistrict.districtName}: ${error}`,
     )
-    throw error
-  }
-}
-
-// Iterate through State Object
-const getBlocks = async () => {
-  try {
-    const newStates = []
-
-    const processSingleState = async index => {
-      // base case
-      if (index >= states.length) {
-        const newStatesJSON = JSON.stringify(newStates)
-        insertStates(newStatesJSON)
-        console.log(bgLogColour, "New States Object Saved into the DB")
-        return
-      }
-
-      // function declaration
-      const currentState = states[index]
-
-      try {
-        console.groupCollapsed(
-          firstLogColour,
-          `Processing ${currentState.stateName} State`,
-        )
-
-        const processedState = await iterateDistricts(currentState)
-        newStates.push(processedState)
-
-        console.groupEnd()
-
-        setTimeout(async () => {
-          await processSingleState(index + 1)
-        }, delayInterval / 2)
-      } catch (error) {
-        console.error(
-          errorLogColour,
-          `Error processing ${currentState.stateName} State: ${error}`,
-        )
-        throw error
-      }
-    }
-
-    // recursive call command
-    await processSingleState(0)
-  } catch (error) {
-    console.error(errorLogColour, `Error iterating through States: ${error}`)
     throw error
   }
 }
