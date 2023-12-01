@@ -4,7 +4,6 @@ const { firstLogColour, errorLogColour, bgLogColour } = require("./colours.js")
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
-let states = JSON.parse(process.env.STATE_LIST)
 const { getBlocks } = require("./getBlocks.js")
 const { insertStates } = require("../model/states.js")
 
@@ -47,7 +46,7 @@ districtFetch = async givenState => {
 }
 
 // Iterate through all States
-const getDistricts = async () => {
+const getDistricts = async states => {
   try {
     const newStates = []
 

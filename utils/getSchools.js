@@ -91,7 +91,7 @@ const getSchools = async givenDistrict => {
       } catch (error) {
         console.error(
           errorLogColour,
-          `Error getting schools from ${currentDistrict.districtName} district`,
+          `Error getting schools from ${currentBlock.eduBlockName} block`,
         )
       }
     }
