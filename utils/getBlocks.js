@@ -56,6 +56,7 @@ const getBlocks = async currentState => {
           ...currentState,
           districts: newDistricts,
         }
+
         return updatedState
       }
 

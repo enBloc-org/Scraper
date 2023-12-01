@@ -37,9 +37,10 @@ const schoolFetch = async (stateId, givenBlock) => {
     const parsedResponse = await response.json()
     const schoolList = parsedResponse.list
 
+    // console.dir(schoolList)
     const updatedBlock = {
       ...givenBlock,
-      schoolList,
+      schoolList: schoolList,
     }
     console.log(
       thirdLogColour,
@@ -68,14 +69,16 @@ const getSchools = async givenDistrict => {
           ...givenDistrict,
           blocks: newBlocks,
         }
+
         return updatedDistrict
       }
+
+      // function declaration
       const currentBlock = givenDistrict.blocks[index]
       const stateId = givenDistrict.districtId
 
-      // function declaration
       try {
-        const processedBlock = schoolFetch(stateId, currentBlock)
+        const processedBlock = await schoolFetch(stateId, currentBlock)
         newBlocks.push(processedBlock)
 
         const result = await new Promise(resolve => {

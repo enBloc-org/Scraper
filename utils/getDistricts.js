@@ -55,7 +55,7 @@ const getDistricts = async () => {
       // base case
       if (index >= states.length) {
         const newStatesJSON = JSON.stringify(newStates)
-        insertStates(newStatesJSON)
+        await insertStates(newStatesJSON)
         console.log(bgLogColour, "States Object saved to DB")
         return
       }
@@ -73,9 +73,13 @@ const getDistricts = async () => {
 
         newStates.push(stateWithBlocks)
 
-        setTimeout(async () => {
-          await processSingleState(index + 1)
-        }, delayInterval)
+        const result = await new Promise(resolve => {
+          setTimeout(async () => {
+            const result = await processSingleState(index + 1)
+            resolve(result)
+          }, delayInterval)
+        })
+        return result
       } catch (error) {
         console.error(
           errorLogColour,
