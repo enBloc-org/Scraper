@@ -1,10 +1,6 @@
 require("dotenv").config()
 
-const {
-  errorLogColour,
-  secondLogColour,
-  thirdLogColour,
-} = require("./colours.js")
+const { errorLogColour, secondLogColour } = require("./colours.js")
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
@@ -34,7 +30,10 @@ const blockFetch = async givenDistrict => {
       ...givenDistrict,
       blocks: parsedResponse,
     }
-    console.log(thirdLogColour, `Fetched ${parsedResponse.length} Blocks`)
+    console.log(
+      secondLogColour,
+      `Fetched ${parsedResponse.length} Blocks for ${updatedDistrict.districtName} District`,
+    )
     return updatedDistrict
   } catch (error) {
     console.error(
@@ -64,23 +63,23 @@ const getBlocks = async currentState => {
       const currentDistrict = currentState.districts[index]
 
       try {
-        console.groupCollapsed(
-          secondLogColour,
-          `Processing ${currentDistrict.districtName} District`,
-        )
+        console.groupCollapsed()
 
         const districtWithBlocks = await blockFetch(currentDistrict)
+        console.groupCollapsed()
         const districtWithSchools = await getSchools(districtWithBlocks)
-        newDistricts.push(districtWithSchools)
-
         console.groupEnd()
+        console.groupEnd()
+
+        newDistricts.push(districtWithSchools)
 
         const result = await new Promise(resolve => {
           setTimeout(async () => {
             const result = await processSingleDistrict(index + 1)
             resolve(result)
-          }, delayInterval / 2)
+          }, delayInterval)
         })
+
         return result
       } catch (error) {
         console.error(

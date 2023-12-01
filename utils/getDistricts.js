@@ -33,7 +33,7 @@ districtFetch = async givenState => {
 
     console.log(
       firstLogColour,
-      `Fetched ${parsedResponse.length} districts for ${givenState.stateName}`,
+      `Fetched ${parsedResponse.length} districts for ${givenState.stateName} State`,
     )
 
     return givenState
@@ -64,13 +64,18 @@ const getDistricts = async () => {
       const currentState = states[index]
 
       try {
+        console.groupCollapsed()
         const stateWithDistricts = await districtFetch(currentState)
+        console.groupCollapsed()
         const stateWithBlocks = await getBlocks(stateWithDistricts)
+        console.groupEnd()
+        console.groupEnd()
+
         newStates.push(stateWithBlocks)
 
         setTimeout(async () => {
           await processSingleState(index + 1)
-        }, delayInterval / 2)
+        }, delayInterval)
       } catch (error) {
         console.error(
           errorLogColour,
@@ -79,6 +84,7 @@ const getDistricts = async () => {
         throw error
       }
     }
+
     // recursive call command
     await processSingleState(0)
   } catch (error) {

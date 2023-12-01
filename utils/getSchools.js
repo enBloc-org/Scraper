@@ -1,10 +1,6 @@
 require("dotenv").config()
 
-const {
-  errorLogColour,
-  thirdLogColour,
-  fourthLogColour,
-} = require("./colours.js")
+const { errorLogColour, thirdLogColour } = require("./colours.js")
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
@@ -45,7 +41,10 @@ const schoolFetch = async (stateId, givenBlock) => {
       ...givenBlock,
       schoolList,
     }
-    console.log(fourthLogColour, `Fetched ${schoolList.length} schools`)
+    console.log(
+      thirdLogColour,
+      `Fetched ${schoolList.length} schools for ${givenBlock.eduBlockName} Block`,
+    )
 
     return updatedBlock
   } catch (error) {
@@ -76,21 +75,14 @@ const getSchools = async givenDistrict => {
 
       // function declaration
       try {
-        console.groupCollapsed(
-          thirdLogColour,
-          `Processing ${currentBlock.eduBlockName}`,
-        )
-
         const processedBlock = schoolFetch(stateId, currentBlock)
         newBlocks.push(processedBlock)
-
-        console.groupEnd()
 
         const result = await new Promise(resolve => {
           setTimeout(async () => {
             const result = await processSingleBlock(index + 1)
             resolve(result)
-          }, delayInterval)
+          }, delayInterval * 2)
         })
         return result
       } catch (error) {
@@ -100,6 +92,7 @@ const getSchools = async givenDistrict => {
         )
       }
     }
+
     // recursive call command
     return processSingleBlock(0)
   } catch (error) {
