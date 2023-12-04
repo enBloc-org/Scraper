@@ -57,9 +57,10 @@ const mapVariablesToColumns = {
 function processGeneralData(pdfText) {
     const allValues = pdfText.split('\n');
     const variablesArr = ['State', 'District', 'Block', 'Rural / Urban', 'Cluster', 'Ward', 'Mohalla', 'Pincode', 'Panchayat', 'City', 'Municipality', 'School Category', 'School Management', 'Medium 1', 'Medium 2', 'Medium 3', 'Medium 4', 'Year of Establishment', 'Is this a Shift School?', 'Anganwadi At Premises', 'Year of Recognition-Pri', 'Building Status', 'Anganwadi Boys', 'Year of Recognition-Upr.Pri', 'Boundary Wall', 'Anganwadi Girls', 'Year of Recognition-Sec', 'No.of Building Blocks', 'Anganwadi Worker', 'Year of Recognition-Higher Sec', 'Pucaa Building Blocks', 'Residential School', 'Is Special School for CWSN?', 'Residential Type', 'Availability of Ramps', 'Minority School', 'Availability of Handrails', 'Approachable By All Weather Road'];
-    const dataForInsertion = [];
+    
 
     allValues.forEach((word, i) => {
+        const dataForInsertion = [];
         // Check for concatenated strings
         const splitPoint = word.search(/[a-z][A-Z]/);
         let splitWords = word;
