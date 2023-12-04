@@ -58,9 +58,7 @@ function processGeneralData(pdfText) {
     const allValues = pdfText.split('\n');
     const variablesArr = ['State', 'District', 'Block', 'Rural / Urban', 'Cluster', 'Ward', 'Mohalla', 'Pincode', 'Panchayat', 'City', 'Municipality', 'School Category', 'School Management', 'Medium 1', 'Medium 2', 'Medium 3', 'Medium 4', 'Year of Establishment', 'Is this a Shift School?', 'Anganwadi At Premises', 'Year of Recognition-Pri', 'Building Status', 'Anganwadi Boys', 'Year of Recognition-Upr.Pri', 'Boundary Wall', 'Anganwadi Girls', 'Year of Recognition-Sec', 'No.of Building Blocks', 'Anganwadi Worker', 'Year of Recognition-Higher Sec', 'Pucaa Building Blocks', 'Residential School', 'Is Special School for CWSN?', 'Residential Type', 'Availability of Ramps', 'Minority School', 'Availability of Handrails', 'Approachable By All Weather Road'];
     
-
     allValues.forEach((word, i) => {
-        const dataForInsertion = [];
         // Check for concatenated strings
         const splitPoint = word.search(/[a-z][A-Z]/);
         let splitWords = word;
@@ -70,7 +68,6 @@ function processGeneralData(pdfText) {
             splitWords = word.substring(splitPoint + 1);
         }
         
-
         // identify the variables
         // check that the string in allValues matches a string in variablesArr - allValues concatenates some strings so it is possible that the string in variablesArr is a substring of a string in allValues
         if (variablesArr.some(variable => splitWords.includes(variable))) {
@@ -83,9 +80,9 @@ function processGeneralData(pdfText) {
                 
                 
                 // prepare the data for db insertion
-                
                 const columnName = mapVariablesToColumns[splitWords]
                 const dataObject = {};
+                const dataForInsertion = []
                 dataObject[columnName] = value;
                 dataForInsertion.push(dataObject);
                 console.log(dataForInsertion)
