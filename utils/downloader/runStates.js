@@ -1,7 +1,7 @@
 require("dotenv").config()
 
 const delayInterval = process.env.DELAY
-const { errorLogColour, firstLogColour } = require("./colours")
+const { errorLogColour, firstLogColour } = require("../colours")
 const { runDistricts } = require("./runDistricts")
 
 const runStates = async states => {
@@ -29,7 +29,7 @@ const runStates = async states => {
         console.groupEnd()
 
         const result = await new Promise(resolve => {
-          seTimeout(async () => {
+          setTimeout(async () => {
             const trigger = await runSingleState(index + 1)
             resolve(trigger)
           }, delayInterval)

@@ -1,7 +1,7 @@
 require("dotenv").config()
 
 const delayInterval = process.env.DELAY
-const { errorLogColour, secondLogColour } = require("./colours")
+const { errorLogColour, secondLogColour } = require("../colours")
 const { runBlocks } = require("./runBlocks")
 
 const runDistricts = async givenState => {

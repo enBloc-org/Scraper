@@ -1,3 +1,4 @@
 .env
-*.sql
+statesDB.sql
 /node_modules
+donwloader/downloads/**

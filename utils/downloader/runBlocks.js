@@ -1,8 +1,8 @@
 require("dotenv").config()
 
 const delayInterval = process.env.DELAY
-const { errorLogColour, thirdLogColour } = require("./colours")
-const {runSchools} = require("./runSchools")
+const { errorLogColour, thirdLogColour } = require("../colours")
+const { runSchools } = require("./runSchools")
 
 const runBlocks = async givenDistrict => {
   try {
@@ -11,10 +11,7 @@ const runBlocks = async givenDistrict => {
 
       // base case
       if (index >= givenDistrict.blocks.length) {
-        console.log(
-          thirdLogColour,
-          `${givenDistrict.districtName} processed`,
-        )
+        console.log(thirdLogColour, `${givenDistrict.districtName} processed`)
 
         return
       }
