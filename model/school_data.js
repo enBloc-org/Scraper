@@ -1,7 +1,7 @@
 const parseLocalPDF = require("../utils/scraper/processGeneralData")
 const db = require("../database/school_data_db")
-
 const insert_school_data = async schoolData => {
+  
   const columns = schoolData
     .map(obj =>
       Object.entries(obj)
@@ -23,9 +23,9 @@ const insert_school_data = async schoolData => {
         .map(([key, value]) => value),
     )
     .flat()
+    
 
-  db.run(/*sql*/ `INSERT INTO school_data (${columns}) VALUES (${data})`
-  );
+  db.prepare(/*sql*/ `INSERT INTO school_data (state, district) VALUES ('Delhi', 'North West A');`)
 }
 
 const run = async () => {
