@@ -2,6 +2,7 @@ const firstLogColour = "\u001b[34m"
 const secondLogColour = "\u001b[35m"
 const thirdLogColour = "\u001b[36m"
 const fourthLogColour = "\u001b[33m"
+const fifthLogColour = "\u001b[32m"
 
 const bgLogColour = "\u001b[37;44m"
 
@@ -12,6 +13,7 @@ module.exports = {
   secondLogColour,
   thirdLogColour,
   fourthLogColour,
+  fifthLogColour,
   bgLogColour,
   errorLogColour,
 }

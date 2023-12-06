@@ -38,8 +38,13 @@ const runSchools = async givenBlock => {
 
         for (let i = 5; i <= 9; i++) {
           const currentYear = i
-          await schoolDownload(currentSchool, currentYear)
-          console.log(`${index} of ${givenBlock.schoolList.length}`) // FOR TESTING ONLY
+          const schoolLoop = await new Promise(resolve => {
+            setTimeout(async () => {
+              const trigger = await schoolDownload(currentSchool, currentYear)
+              resolve(trigger)
+            }, delayInterval)
+          })
+          await schoolLoop
         }
 
         console.groupEnd()

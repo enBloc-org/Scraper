@@ -1,10 +1,12 @@
 const path = require("path")
 const fs = require("fs")
 const base64 = require("base64topdf")
+const pdfParse = require("pdf-parse")
 
 const requestCookie = process.env.COOKIE
+const delayInterval = process.env.DELAY
 
-const { errorLogColour } = require("../colours.js")
+const { errorLogColour, fifthLogColour } = require("../colours.js")
 
 const schoolDownload = async (givenSchool, currentYear) => {
   return new Promise(async (resolve, reject) => {
@@ -52,20 +54,37 @@ const schoolDownload = async (givenSchool, currentYear) => {
           `${yearValue[currentYear]}-${givenSchool.schoolName}.pdf`,
         )
 
+        const validatePDF = async pdfFile => {
+          try {
+            const data = await pdfParse(pdfFile)
+            return data && data.text && data.text.length > 0
+          } catch (error) {
+            return false
+          }
+        }
+
         base64.base64Decode(base64String, pdfFilePath)
-        fs.unlinkSync(base64StringPath)
-        console.log(`${yearValue[currentYear]} Downloaded`)
-        resolve()
+
+        const isValidPDF = await validatePDF(pdfFilePath)
+        if (isValidPDF) {
+          fs.unlinkSync(base64StringPath)
+          console.log(fifthLogColour, `${yearValue[currentYear]} Downloaded`)
+          resolve()
+        } else {
+          setTimeout(() => {
+            fs.unlinkSync(pdfFilePath)
+            return convertBase64()
+          }, delayInterval * 2)
+        }
       }
 
       const pump = async () => {
         const { done, value } = await reader.read()
 
-        //base case
+        // base case
         if (done) {
           pdfWriteStream.end()
           await convertBase64()
-
           return
         }
 

@@ -19,9 +19,9 @@ const runStates = async states => {
       try {
         console.groupCollapsed(
           firstLogColour,
-          `Running ${currentState.stateName} State - ${
-            states.indexOf(currentState) + 1
-          }/${states.length - 1}`,
+          `Running ${currentState.stateName} State - ${index + 1}/${
+            states.length
+          }`,
         )
 
         await runDistricts(currentState)
