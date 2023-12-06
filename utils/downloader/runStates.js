@@ -4,6 +4,12 @@ const delayInterval = process.env.DELAY
 const { errorLogColour, firstLogColour } = require("../colours")
 const { runDistricts } = require("./runDistricts")
 
+/**
+ *
+ * @param {*} states should be the full object of states stored in the database after running crawler.js
+ * @returns no value
+ * @remarks this is a recursive function that allows us to process each state in succession
+ */
 const runStates = async states => {
   try {
     const runSingleState = async index => {

@@ -7,11 +7,18 @@ const delayInterval = process.env.DELAY
 const { errorLogColour, fourthLogColour } = require("../colours")
 const { schoolDownload } = require("../downloader/schoolDownload.js")
 
+// create downloads directory if none exists
 const downloadsDir = path.join(__dirname, "downloads")
 if (!fs.existsSync(downloadsDir)) {
   fs.mkdirSync(downloadsDir)
 }
 
+/**
+ *
+ * @param {*} givenBlock should be the full object of the block currently being processed
+ * @returns no value
+ * @remarks this is a recursive function that allows us to process each school in a block in succession
+ */
 const runSchools = async givenBlock => {
   try {
     const runSingleSchool = async index => {
@@ -46,7 +53,6 @@ const runSchools = async givenBlock => {
           })
           await schoolLoop
         }
-
         console.groupEnd()
 
         const result = await new Promise(resolve => {
@@ -55,7 +61,6 @@ const runSchools = async givenBlock => {
             resolve(trigger)
           }, delayInterval)
         })
-
         return result
       } catch (error) {
         console.error(errorLogColour, `Error running School: ${error}`)

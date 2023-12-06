@@ -4,6 +4,12 @@ const delayInterval = process.env.DELAY
 const { errorLogColour, secondLogColour } = require("../colours")
 const { runBlocks } = require("./runBlocks")
 
+/**
+ *
+ * @param {*} givenState should be the full object of the state currently being processed
+ * @returns no value
+ * @remarks this is a recursive function that allows us to process each district in a state in succession
+ */
 const runDistricts = async givenState => {
   try {
     const runSingleDistrict = async index => {
