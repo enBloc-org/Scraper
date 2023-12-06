@@ -10,14 +10,7 @@ const insertSchoolData = async schoolData => {
         .map(([key, value]) => key),
     )
     .flat()
-  // const placeholders = schoolData
-  //   .map(obj =>
-  //     Object.entries(obj)
-  //       .filter(([key, value]) => key !== "undefined")
-  //       .map(() => "?"),
-  //   )
-  //   .flat()
-  
+
   const data = schoolData
     .map(obj =>
       Object.entries(obj)
@@ -26,22 +19,14 @@ const insertSchoolData = async schoolData => {
     )
     .flat()
 
-    console.log(columns)
-    console.log(data)
-
+  const insert_school_data = db.prepare(
+    /*sql*/ `INSERT INTO school_data (${columns.join(', ')}) VALUES (${data.map(() => '?').join(', ')})`
+  );
   
-  // const insert_school_data = db.prepare(/*sql*/ `INSERT INTO school_data (${columns}) VALUES (${data})
-  //   `);
-    const insert_school_data = db.prepare(/*sql*/ `INSERT INTO school_data (state,district,block,urban) VALUES ('Delhi',
-    'North West A',
-    'DoE Zone-10',
-    '2-Urban')
-    `);
-    insert_school_data.run()
-
+    insert_school_data.run(data);
 }
 
-const run = async () => {
+const runScraper = async () => {
   const pdfPath =
     "/Users/eazzopardi/code/agency-scraper/sample report card (1).pdf"
 
@@ -49,4 +34,4 @@ const run = async () => {
   insertSchoolData(pdfSchoolData)
 }
 
-run()
+runScraper()
