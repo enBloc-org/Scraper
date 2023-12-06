@@ -1,8 +1,8 @@
-const parseLocalPDF = require("../utils/scraper/processGeneralData")
+/* eslint-disable no-unused-vars */
+
 const db = require("../database/school_data_db")
 
 const insertSchoolData = async schoolData => {
-  
   const columns = schoolData
     .map(obj =>
       Object.entries(obj)
@@ -20,18 +20,12 @@ const insertSchoolData = async schoolData => {
     .flat()
 
   const insert_school_data = db.prepare(
-    /*sql*/ `INSERT INTO school_data (${columns.join(', ')}) VALUES (${data.map(() => '?').join(', ')})`
-  );
-  
-    insert_school_data.run(data);
+    /*sql*/ `INSERT INTO school_data (${columns.join(", ")}) VALUES (${data
+      .map(() => "?")
+      .join(", ")})`,
+  )
+
+  insert_school_data.run(data)
 }
 
-const runScraper = async () => {
-  const pdfPath =
-    "/Users/eazzopardi/code/agency-scraper/sample report card (1).pdf"
-
-  const pdfSchoolData = await parseLocalPDF(pdfPath)
-  insertSchoolData(pdfSchoolData)
-}
-
-runScraper()
+module.exports = insertSchoolData
