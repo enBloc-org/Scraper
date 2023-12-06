@@ -3,12 +3,12 @@ const db = require("../database/school_data_db")
 
 const insert_school_data = async schoolData => {
   const columns = schoolData
-  .map(obj =>
-    Object.entries(obj)
-      .filter(([key, value]) => key !== "undefined")
-      .map(([key, value]) => key)
-  )
-  .flat()
+    .map(obj =>
+      Object.entries(obj)
+        .filter(([key, value]) => key !== "undefined")
+        .map(([key, value]) => key),
+    )
+    .flat()
   const placeholders = schoolData
     .map(obj =>
       Object.entries(obj)
@@ -24,8 +24,8 @@ const insert_school_data = async schoolData => {
     )
     .flat()
 
-  // db.run(/*sql*/ `INSERT INTO school_data (${columns}) VALUES (${data})`
-  // );
+  db.run(/*sql*/ `INSERT INTO school_data (${columns}) VALUES (${data})`
+  );
 }
 
 const run = async () => {
