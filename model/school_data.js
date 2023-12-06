@@ -1,6 +1,7 @@
 const parseLocalPDF = require("../utils/scraper/processGeneralData")
 const db = require("../database/school_data_db")
-const insert_school_data = async schoolData => {
+
+const insertSchoolData = async schoolData => {
   
   const columns = schoolData
     .map(obj =>
@@ -9,13 +10,14 @@ const insert_school_data = async schoolData => {
         .map(([key, value]) => key),
     )
     .flat()
-  const placeholders = schoolData
-    .map(obj =>
-      Object.entries(obj)
-        .filter(([key, value]) => key !== "undefined")
-        .map(() => "?"),
-    )
-    .flat()
+  // const placeholders = schoolData
+  //   .map(obj =>
+  //     Object.entries(obj)
+  //       .filter(([key, value]) => key !== "undefined")
+  //       .map(() => "?"),
+  //   )
+  //   .flat()
+  
   const data = schoolData
     .map(obj =>
       Object.entries(obj)
@@ -23,9 +25,20 @@ const insert_school_data = async schoolData => {
         .map(([key, value]) => value),
     )
     .flat()
-    
 
-  db.prepare(/*sql*/ `INSERT INTO school_data (state, district) VALUES ('Delhi', 'North West A');`)
+    console.log(columns)
+    console.log(data)
+
+  
+  // const insert_school_data = db.prepare(/*sql*/ `INSERT INTO school_data (${columns}) VALUES (${data})
+  //   `);
+    const insert_school_data = db.prepare(/*sql*/ `INSERT INTO school_data (state,district,block,urban) VALUES ('Delhi',
+    'North West A',
+    'DoE Zone-10',
+    '2-Urban')
+    `);
+    insert_school_data.run()
+
 }
 
 const run = async () => {
@@ -33,7 +46,7 @@ const run = async () => {
     "/Users/eazzopardi/code/agency-scraper/sample report card (1).pdf"
 
   const pdfSchoolData = await parseLocalPDF(pdfPath)
-  insert_school_data(pdfSchoolData)
+  insertSchoolData(pdfSchoolData)
 }
 
 run()
