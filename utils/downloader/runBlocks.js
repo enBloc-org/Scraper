@@ -11,7 +11,10 @@ const runBlocks = async givenDistrict => {
 
       // base case
       if (index >= givenDistrict.blocks.length) {
-        console.log(thirdLogColour, `${givenDistrict.districtName} processed`)
+        console.log(
+          thirdLogColour,
+          `${givenDistrict.districtName} District processed`,
+        )
 
         return
       }
@@ -21,7 +24,7 @@ const runBlocks = async givenDistrict => {
         console.groupCollapsed(
           thirdLogColour,
           `Running ${currentBlock.eduBlockName} Block - ${index + 1}/${
-            givenDistrict.blocks.length - 1
+            givenDistrict.blocks.length
           }`,
         )
 

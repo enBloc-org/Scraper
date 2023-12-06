@@ -32,8 +32,7 @@ const schoolDownload = async givenSchool => {
       "https://src.udiseplus.gov.in/NewReportCard/PdfReportSchId",
       options,
     )
-    const reader = response.body.getReader()
-
+    const reader = await response.body.getReader()
     const base64StringPath = path.join(
       __dirname,
       "downloads",
@@ -49,7 +48,7 @@ const schoolDownload = async givenSchool => {
         `${givenSchool.schoolName}.pdf`,
       )
 
-      await base64.base64Decode(base64String, pdfFilePath)
+      base64.base64Decode(base64String, pdfFilePath)
       fs.unlinkSync(base64StringPath)
     }
 
@@ -90,7 +89,7 @@ const runSchools = async givenBlock => {
           fourthLogColour,
           `${givenBlock.eduBlockName} Block Processed`,
         )
-
+        console.log(`${index} of ${givenBlock.schoolList.length}`)
         return
       }
 
@@ -98,10 +97,13 @@ const runSchools = async givenBlock => {
       try {
         console.groupCollapsed(
           fourthLogColour,
-          `Downloading ${currentSchool.schoolName}`,
+          `Downloading ${currentSchool.schoolName} - ${index + 1}/${
+            givenBlock.schoolList.length
+          }`,
         )
 
         await schoolDownload(currentSchool)
+        console.log(`${index} of ${givenBlock.schoolList.length}`) // FOR TESTING ONLY
 
         console.groupEnd()
 

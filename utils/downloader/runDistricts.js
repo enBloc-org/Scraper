@@ -21,7 +21,7 @@ const runDistricts = async givenState => {
         console.groupCollapsed(
           secondLogColour,
           `Running ${currentDistrict.districtName} District - ${index + 1}/${
-            givenState.districts.length - 1
+            givenState.districts.length
           }`,
         )
 
