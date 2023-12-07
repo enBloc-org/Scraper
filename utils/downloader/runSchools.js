@@ -30,7 +30,6 @@ const runSchools = async givenBlock => {
           fourthLogColour,
           `${givenBlock.eduBlockName} Block Processed`,
         )
-        console.log(`${index} of ${givenBlock.schoolList.length}`)
         return
       }
 

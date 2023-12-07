@@ -53,6 +53,7 @@ const schoolDownload = async (givenSchool, currentYear) => {
       )
       const pdfWriteStream = fs.createWriteStream(base64StringPath)
 
+      // helper function
       /**
        * @returns this function will resolve the promise made at the top level of schoolDownload once a pdf file is successfully parsed
        * @remarks this function will be recalled if the download of the target pdf is not successful
@@ -65,6 +66,7 @@ const schoolDownload = async (givenSchool, currentYear) => {
           `${yearValue[currentYear]}-${givenSchool.schoolName}.pdf`,
         )
 
+        // helper function
         /**
          *
          * @param {*} pdfFile should be the path created for a pdf file to be written from the decoded base64 download returned from our fetch call
@@ -96,7 +98,8 @@ const schoolDownload = async (givenSchool, currentYear) => {
 
       /**
        *
-       * @returns a text file storing the full base64 string recovered from our fetch call
+       * @returns base64 string to be decoded into a pdf
+       * @remarks recursive function processing data stream from our fetch call
        */
       const pump = async () => {
         const { done, value } = await reader.read()

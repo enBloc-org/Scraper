@@ -7,8 +7,8 @@ const { runDistricts } = require("./runDistricts")
 /**
  *
  * @param {*} states should be the full object of states stored in the database after running crawler.js
- * @returns no value
- * @remarks this is a recursive function that allows us to process each state in succession
+ * @returns a pdf for each available year in each school
+ * @remarks this is a recursive function that calls each school endpoint in sucession
  */
 const runStates = async states => {
   try {
