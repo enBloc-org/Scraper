@@ -8,14 +8,12 @@ const processGeneralData = pdfText => {
   const allValues = pdfText.split("\n")
   const schoolDataArr = []
   allValues.forEach((word, i) => {
-
     const splitPoint = word.search(/[a-z][A-Z]/)
     let splitWords = word
     if (splitPoint !== -1) {
       splitWords = word.substring(splitPoint + 1)
     }
 
-    
     if (variablesArr.some(variable => splitWords.includes(variable))) {
       const value = allValues[i + 1]
       if (!variablesArr.some(variable => value.includes(variable))) {
