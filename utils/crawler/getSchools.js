@@ -75,6 +75,7 @@ const getSchools = async givenDistrict => {
 
       try {
         const processedBlock = await schoolFetch(stateId, currentBlock)
+
         newBlocks.push(processedBlock)
         console.log(
           thirdLogColour,
@@ -95,6 +96,7 @@ const getSchools = async givenDistrict => {
           errorLogColour,
           `Error getting schools from ${currentBlock.eduBlockName} block`,
         )
+        throw error
       }
     }
 
