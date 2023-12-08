@@ -1,7 +1,6 @@
 const db = require("../database/school_data_db")
 
 const insertSchoolData = async schoolData => {
-  
   const columns = schoolData
     .map(obj =>
       Object.entries(obj)

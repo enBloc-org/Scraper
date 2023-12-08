@@ -3,13 +3,13 @@ const pdf = require("pdf-parse")
 
 const mapVariablesToColumns = require("./mapVariablesToColumns")
 const variablesArr = Object.keys(mapVariablesToColumns)
-variablesArr.push("Visit of school for / by") 
+variablesArr.push("Visit of school for / by")
 
 const processGeneralData = async pdfText => {
   const allValues = pdfText.split("\n")
   // udise_code and schoolname are not split by \n so need an alternative process
   const schoolDataArr = []
-  
+
   allValues.forEach((word, i) => {
     const splitPoint = word.search(/[a-z][A-Z]/)
 
@@ -17,14 +17,11 @@ const processGeneralData = async pdfText => {
 
     if (splitPoint !== -1) {
       splitWord = word.substring(splitPoint + 1)
-
     }
 
     if (variablesArr.some(variable => variable.includes(splitWord))) {
-
       const value = allValues[i + 1]
 
-      
       if (!variablesArr.includes(value)) {
         const columns = mapVariablesToColumns[splitWord]
         const dataObject = { [columns]: value }
