@@ -39,7 +39,6 @@ const schoolFetch = async (stateId, givenBlock) => {
 
     if (schoolList.length === 0) return givenBlock
 
-    // console.dir(schoolList)
     const updatedBlock = {
       ...givenBlock,
       schoolList,
