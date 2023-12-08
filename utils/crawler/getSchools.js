@@ -42,10 +42,6 @@ const schoolFetch = async (stateId, givenBlock) => {
       ...givenBlock,
       schoolList,
     }
-    console.log(
-      thirdLogColour,
-      `Fetched ${schoolList.length} schools for ${givenBlock.eduBlockName} Block`,
-    )
 
     return updatedBlock
   } catch (error) {
@@ -80,6 +76,12 @@ const getSchools = async givenDistrict => {
       try {
         const processedBlock = await schoolFetch(stateId, currentBlock)
         newBlocks.push(processedBlock)
+        console.log(
+          thirdLogColour,
+          `Fetched ${processedBlock.schoolList.length} schools for ${
+            processedBlock.eduBlockName
+          } Block - ${index + 1}/${givenDistrict.blocks.length}`,
+        )
 
         const result = await new Promise(resolve => {
           setTimeout(async () => {

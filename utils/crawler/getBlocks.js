@@ -30,10 +30,7 @@ const blockFetch = async givenDistrict => {
       ...givenDistrict,
       blocks: parsedResponse,
     }
-    console.log(
-      secondLogColour,
-      `Fetched ${parsedResponse.length} Blocks for ${updatedDistrict.districtName} District`,
-    )
+    console.log(secondLogColour, `Fetched ${parsedResponse.length} Blocks`)
     return updatedDistrict
   } catch (error) {
     console.error(
@@ -64,12 +61,15 @@ const getBlocks = async currentState => {
       const currentDistrict = currentState.districts[index]
 
       try {
-        console.groupCollapsed()
-
+        console.log(
+          secondLogColour,
+          `Processing ${currentDistrict.districtName} District - ${index + 1}/${
+            currentState.districts.length
+          }`,
+        )
         const districtWithBlocks = await blockFetch(currentDistrict)
         console.groupCollapsed()
         const districtWithSchools = await getSchools(districtWithBlocks)
-        console.groupEnd()
         console.groupEnd()
 
         newDistricts.push(districtWithSchools)
