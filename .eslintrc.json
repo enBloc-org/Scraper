@@ -8,7 +8,7 @@
     "parserOptions": {
         "ecmaVersion": "latest"
     },
-    "ignorePatterns": [".env", "node_modules/", ".husky/", "*.json", "downloader/donwloads/**", ".DS_Store", ".gitignore"],
+    "ignorePatterns": [".env", "node_modules/", ".husky/", "*.json", "downloader/downloads/**", ".DS_Store", ".gitignore"],
     "rules": {
         "consistent-return": 0,
         "no-await-in-loop": 0

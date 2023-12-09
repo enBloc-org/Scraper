@@ -1,4 +1,4 @@
 .env
 statesDB.sql
 /node_modules
-donwloader/downloads/**
+downloader/downloads/**
