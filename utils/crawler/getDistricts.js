@@ -8,7 +8,8 @@ const { selectLatest, updateStates } = require("../../model/states.js")
 const { getBlocks } = require("./getBlocks.js")
 
 const mostRecentStatesJSON = selectLatest()
-const mostRecentStates = JSON.parse(mostRecentStatesJSON.states_file)
+const mostRecentStates =
+  mostRecentStatesJSON && JSON.parse(mostRecentStatesJSON.states_file)
 
 // Fetch Call to the endpoint in each State
 const districtFetch = async givenState => {
@@ -59,7 +60,7 @@ const getDistricts = async states => {
         return
       }
 
-      // failsafe stores at every fifth state
+      // failsafe stores at every second state
       if (index % 2 === 0 && index !== 0) {
         const newStatesJSON = JSON.stringify(newStates)
         updateStates(newStatesJSON)
@@ -68,7 +69,11 @@ const getDistricts = async states => {
 
       // function declaration
       let currentState = states[index]
-      if (mostRecentStates.length > 0 && mostRecentStates.length > index) {
+      if (
+        mostRecentStates &&
+        mostRecentStates.length > 0 &&
+        mostRecentStates.length > index
+      ) {
         currentState = mostRecentStates[index]
       }
 
