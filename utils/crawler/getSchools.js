@@ -1,6 +1,6 @@
 require("dotenv").config()
 
-const { errorLogColour, thirdLogColour } = require("./colours.js")
+const { errorLogColour, thirdLogColour } = require("../colours.js")
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
@@ -40,7 +40,7 @@ const schoolFetch = async (stateId, givenBlock) => {
     // console.dir(schoolList)
     const updatedBlock = {
       ...givenBlock,
-      schoolList: schoolList,
+      schoolList,
     }
     console.log(
       thirdLogColour,
@@ -83,15 +83,15 @@ const getSchools = async givenDistrict => {
 
         const result = await new Promise(resolve => {
           setTimeout(async () => {
-            const result = await processSingleBlock(index + 1)
-            resolve(result)
+            const nextBlock = await processSingleBlock(index + 1)
+            resolve(nextBlock)
           }, delayInterval * 2)
         })
         return result
       } catch (error) {
         console.error(
           errorLogColour,
-          `Error getting schools from ${currentDistrict.districtName} district`,
+          `Error getting schools from ${currentBlock.eduBlockName} block`,
         )
       }
     }
@@ -101,7 +101,7 @@ const getSchools = async givenDistrict => {
   } catch (error) {
     console.error(
       errorLogColour,
-      `Error getting scools from ${givenState.stateName}: ${error}`,
+      `Error getting scools from ${givenDistrict.stateName}: ${error}`,
     )
     throw error
   }
