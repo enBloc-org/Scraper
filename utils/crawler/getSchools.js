@@ -37,8 +37,6 @@ const schoolFetch = async (stateId, givenBlock) => {
     const parsedResponse = await response.json()
     const schoolList = parsedResponse.list
 
-    if (schoolList.length === 0) return givenBlock
-
     const updatedBlock = {
       ...givenBlock,
       schoolList,

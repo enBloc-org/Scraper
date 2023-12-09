@@ -4,8 +4,11 @@ const { firstLogColour, errorLogColour, bgLogColour } = require("../colours.js")
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
-const { insertStates } = require("../../model/states.js")
+const { selectLatest, updateStates } = require("../../model/states.js")
 const { getBlocks } = require("./getBlocks.js")
+
+const mostRecentStatesJSON = selectLatest()
+const mostRecentStates = JSON.parse(mostRecentStatesJSON.states_file)
 
 // Fetch Call to the endpoint in each State
 const districtFetch = async givenState => {
@@ -51,13 +54,23 @@ const getDistricts = async states => {
       // base case
       if (index >= states.length) {
         const newStatesJSON = JSON.stringify(newStates)
-        await insertStates(newStatesJSON)
+        updateStates(newStatesJSON)
         console.log(bgLogColour, "States Object saved to DB")
         return
       }
 
+      // failsafe stores at every fifth state
+      if (index % 2 === 0 && index !== 0) {
+        const newStatesJSON = JSON.stringify(newStates)
+        updateStates(newStatesJSON)
+        console.log(bgLogColour, "States Object saved to DB")
+      }
+
       // function declaration
-      const currentState = states[index]
+      let currentState = states[index]
+      if (mostRecentStates.length > 0 && mostRecentStates.length > index) {
+        currentState = mostRecentStates[index]
+      }
 
       try {
         console.log(
@@ -66,12 +79,16 @@ const getDistricts = async states => {
             states.length
           }`,
         )
-        const stateWithDistricts = await districtFetch(currentState)
-        console.groupCollapsed()
-        const stateWithBlocks = await getBlocks(stateWithDistricts)
-        console.groupEnd()
+        if (currentState.hasOwnProperty("districts")) {
+          console.log(`Already in DB`)
+        } else {
+          const stateWithDistricts = await districtFetch(currentState)
+          console.groupCollapsed()
+          const stateWithBlocks = await getBlocks(stateWithDistricts)
+          console.groupEnd()
 
-        newStates.push(stateWithBlocks)
+          newStates.push(stateWithBlocks)
+        }
 
         const result = await new Promise(resolve => {
           setTimeout(async () => {
