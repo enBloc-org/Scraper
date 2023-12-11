@@ -6,14 +6,6 @@ const { selectLatest } = require("../model/states.js")
 
 jest.mock("../utils/crawler/getBlocks.js", () => ({
   getBlocks: jest.fn(currentState => currentState),
-  // .mockResolvedValue({
-  //   stateId: 135,
-  //   stateName: "Fake State",
-  //   districts: [
-  //     { districtId: 1, districtName: "District1" },
-  //     { districtId: 2, districtName: "District2" },
-  //   ],
-  // }),
 }))
 
 global.fetch = jest.fn().mockResolvedValue({
@@ -32,6 +24,7 @@ describe("getDistricts", () => {
         stateSize: "Large",
       },
     ]
+
     await getDistricts(testStates)
   })
 

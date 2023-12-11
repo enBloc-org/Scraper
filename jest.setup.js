@@ -1,20 +1,15 @@
-// jest.setup.js
+module.exports = () => {
+  const fs = require("fs")
+  const path = require("path")
+  const { execSync } = require("child_process")
 
-const fs = require("fs")
-const path = require("path")
-const { execSync } = require("child_process")
+  const testDataDir = path.join(__dirname, "__tests__", "data")
+  if (!fs.existsSync(testDataDir)) {
+    fs.mkdirSync(testDataDir)
+  }
 
-// Create a directory for test data (if not exists)
-const testDataDir = path.join(__dirname, "__tests__", "data")
-if (!fs.existsSync(testDataDir)) {
-  fs.mkdirSync(testDataDir)
+  const testDbPath = path.join(testDataDir, "test.db")
+  execSync(`sqlite3 ${testDbPath} < ./database/schema.sql`)
+
+  global.TEST_DB_PATH = testDbPath
 }
-
-// Create a test SQLite database file
-const testDbPath = path.join(testDataDir, "test.db")
-
-// Execute SQLite commands to set up your test database schema
-execSync(`sqlite3 ${testDbPath} < ./database/schema.sql`)
-
-// Set the test database file path in a global variable for your tests to use
-global.TEST_DB_PATH = testDbPath
