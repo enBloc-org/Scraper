@@ -1,6 +1,6 @@
 BEGIN;
 
-CREATE TABLE school_data (
+CREATE TABLE IF NOT EXISTS school_data (
     udise_code TEXT,
     year TEXT,
     schoolname TEXT,
