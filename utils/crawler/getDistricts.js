@@ -28,9 +28,11 @@ const districtFetch = async givenState => {
   try {
     const response = await fetch(`${baseURL}/locateSchool/getDistrict`, options)
     const parsedResponse = await response.json()
+    const { stateId, stateName } = givenState
 
     givenState = {
-      ...givenState,
+      stateId,
+      stateName,
       districts: parsedResponse,
     }
 
