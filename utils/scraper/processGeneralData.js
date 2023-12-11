@@ -9,7 +9,6 @@ const processGeneralData = async pdfText => {
   const allValues = pdfText.split("\n")
   // udise_code and schoolname are not split by \n so need an alternative process
   const schoolDataArr = []
-
   allValues.forEach((word, i) => {
     const splitPoint = word.search(/[a-z][A-Z]/)
 

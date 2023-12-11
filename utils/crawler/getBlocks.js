@@ -1,6 +1,6 @@
 require("dotenv").config()
 
-const { errorLogColour, secondLogColour } = require("./colours.js")
+const { errorLogColour, secondLogColour } = require("../colours.js")
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
@@ -76,8 +76,8 @@ const getBlocks = async currentState => {
 
         const result = await new Promise(resolve => {
           setTimeout(async () => {
-            const result = await processSingleDistrict(index + 1)
-            resolve(result)
+            const nextDistrict = await processSingleDistrict(index + 1)
+            resolve(nextDistrict)
           }, delayInterval)
         })
 
@@ -85,7 +85,7 @@ const getBlocks = async currentState => {
       } catch (error) {
         console.error(
           errorLogColour,
-          `Error processing ${currentDistrict.districtName}: ${error}`,
+          `Error processing ${currentState.stateName}: ${error}`,
         )
         throw error
       }
@@ -96,7 +96,7 @@ const getBlocks = async currentState => {
   } catch (error) {
     console.error(
       errorLogColour,
-      `Error processing ${givenDistrict.districtName}: ${error}`,
+      `Error processing ${currentState.stateName}: ${error}`,
     )
     throw error
   }
