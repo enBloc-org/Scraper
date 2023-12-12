@@ -82,10 +82,10 @@ const schoolDownload = async (givenSchool, currentYear) => {
           }
         }
 
-        await new Promise(resolve => {
+        await new Promise(deliver => {
           setTimeout(() => {
             const trigger = base64.base64Decode(base64String, pdfFilePath)
-            resolve(trigger)
+            deliver(trigger)
           }, delayInterval / 2)
         })
 
@@ -95,10 +95,10 @@ const schoolDownload = async (givenSchool, currentYear) => {
           fs.unlinkSync(base64StringPath)
           console.log(`Downloaded`)
 
-          await new Promise(resolve => {
+          await new Promise(close => {
             setTimeout(async () => {
               const scrape = await scraper(pdfFilePath)
-              resolve(scrape)
+              close(scrape)
             }, delayInterval / 2)
           })
 
