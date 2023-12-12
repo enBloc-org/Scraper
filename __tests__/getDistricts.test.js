@@ -1,5 +1,4 @@
 require("dotenv").config()
-process.env.NODE_ENV = "test"
 
 const { getDistricts } = require("../utils/crawler/getDistricts.js")
 const { selectLatest } = require("../model/states.js")

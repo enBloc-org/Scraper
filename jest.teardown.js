@@ -8,4 +8,6 @@ module.exports = () => {
   if (fs.existsSync(testDbPath)) {
     fs.unlinkSync(testDbPath)
   }
+
+  process.env.NODE_ENV = "production"
 }

@@ -25,9 +25,12 @@ const blockFetch = async givenDistrict => {
       options,
     )
     const parsedResponse = await response.json()
+    const { districtId, stateId, districtName } = givenDistrict
 
     const updatedDistrict = {
-      ...givenDistrict,
+      districtId,
+      stateId,
+      districtName,
       blocks: parsedResponse,
     }
     console.log(secondLogColour, `Fetched ${parsedResponse.length} Blocks`)

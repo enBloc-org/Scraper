@@ -3,6 +3,8 @@ module.exports = () => {
   const path = require("path")
   const { execSync } = require("child_process")
 
+  process.env.NODE_ENV = "test"
+
   const testDataDir = path.join(__dirname, "__tests__", "data")
   if (!fs.existsSync(testDataDir)) {
     fs.mkdirSync(testDataDir)

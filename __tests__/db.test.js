@@ -1,5 +1,4 @@
 require("dotenv").config()
-process.env.NODE_ENV = "test"
 
 const { updateStates, selectAll } = require("../model/states.js")
 
