@@ -11,6 +11,20 @@ global.fetch = jest.fn().mockResolvedValue({
   ]),
 })
 
+const mockConsoleGroupCollapsed = jest
+  .spyOn(console, "groupCollapsed")
+  .mockImplementation(() => {})
+
+const mockConsoleGroupEnd = jest
+  .spyOn(console, "groupEnd")
+  .mockImplementation(() => {})
+
+const mockConsoleLog = jest.spyOn(console, "log").mockImplementation(() => {})
+
+const mockConsoleError = jest
+  .spyOn(console, "error")
+  .mockImplementation(() => {})
+
 describe("getBlocks", () => {
   let result
 
@@ -26,6 +40,13 @@ describe("getBlocks", () => {
     }
 
     result = await getBlocks(testState)
+  })
+
+  test("updates devs at each recursion", () => {
+    expect(mockConsoleGroupCollapsed).toHaveBeenCalled()
+    expect(mockConsoleGroupEnd).toHaveBeenCalled()
+    expect(mockConsoleLog).toHaveBeenCalled()
+    expect(mockConsoleError).not.toHaveBeenCalled()
   })
 
   test("calls getSchools for each Block in a District", () => {

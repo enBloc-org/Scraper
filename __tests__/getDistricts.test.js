@@ -14,6 +14,20 @@ global.fetch = jest.fn().mockResolvedValue({
   ]),
 })
 
+const mockConsoleGroupCollapsed = jest
+  .spyOn(console, "groupCollapsed")
+  .mockImplementation(() => {})
+
+const mockConsoleGroupEnd = jest
+  .spyOn(console, "groupEnd")
+  .mockImplementation(() => {})
+
+const mockConsoleLog = jest.spyOn(console, "log").mockImplementation(() => {})
+
+const mockConsoleError = jest
+  .spyOn(console, "error")
+  .mockImplementation(() => {})
+
 describe("getDistricts", () => {
   beforeEach(async () => {
     const testStates = [
@@ -25,6 +39,13 @@ describe("getDistricts", () => {
     ]
 
     await getDistricts(testStates)
+  })
+
+  test("updates devs at each recursion", () => {
+    expect(mockConsoleGroupCollapsed).toHaveBeenCalled()
+    expect(mockConsoleGroupEnd).toHaveBeenCalled()
+    expect(mockConsoleLog).toHaveBeenCalled()
+    expect(mockConsoleError).not.toHaveBeenCalled()
   })
 
   test("it should process states and update the database", async () => {
