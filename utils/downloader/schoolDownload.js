@@ -5,6 +5,7 @@ const pdfParse = require("pdf-parse")
 
 const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
+const { scraper } = require("../../scraper.js")
 const { errorLogColour, fifthLogColour } = require("../colours.js")
 
 /**
@@ -81,16 +82,33 @@ const schoolDownload = async (givenSchool, currentYear) => {
           }
         }
 
-        base64.base64Decode(base64String, pdfFilePath)
+        await new Promise(resolve => {
+          setTimeout(() => {
+            const trigger = base64.base64Decode(base64String, pdfFilePath)
+            resolve(trigger)
+          }, delayInterval / 2)
+        })
 
         const isValidPDF = await validatePDF(pdfFilePath)
         if (isValidPDF) {
+          console.group(fifthLogColour, `${yearValue[currentYear]}`)
           fs.unlinkSync(base64StringPath)
-          console.log(fifthLogColour, `${yearValue[currentYear]} Downloaded`)
+          console.log(`Downloaded`)
+
+          await new Promise(resolve => {
+            setTimeout(async () => {
+              const scrape = await scraper(pdfFilePath)
+              resolve(scrape)
+            }, delayInterval / 2)
+          })
+
+          fs.unlinkSync(pdfFilePath)
+          console.groupEnd()
+
           resolve()
         } else {
+          fs.unlinkSync(pdfFilePath)
           setTimeout(() => {
-            fs.unlinkSync(pdfFilePath)
             return convertBase64()
           }, delayInterval * 2)
         }
