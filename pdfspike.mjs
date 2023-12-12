@@ -13,7 +13,7 @@ function extractText(pdfUrl) {
           return textContent.items.map(item => ({
             text: item.str,
             x: item.transform[4], // x-coordinate
-            y: item.transform[5]  // y-coordinate
+            y: item.transform[5], // y-coordinate
           }))
         }),
       )
@@ -22,10 +22,12 @@ function extractText(pdfUrl) {
       return texts.flat()
     })
     .then(items => {
-		// console.log(items)
-		const format = items.map(item => `${item.text} (${item.x}, ${item.y})`).join('\n');
-		console.log(format)
-		fs.writeFileSync("output_with_coordinates.txt", format);
+      // console.log(items)
+      const format = items
+        .map(item => `${item.text} (${item.x}, ${item.y})`)
+        .join("\n")
+      console.log(format)
+      fs.writeFileSync("output_with_coordinates.txt", format)
     })
     .catch(err => {
       console.error(`Error: ${err}`)
