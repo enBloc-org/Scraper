@@ -21,54 +21,35 @@ if (!fs.existsSync(downloadsDir)) {
  */
 const runSchools = async givenBlock => {
   try {
-    const runSingleSchool = async index => {
+    for (let index = 0; index < givenBlock.schoolList.length; index++) {
       const currentSchool = givenBlock.schoolList[index]
 
-      // base case
-      if (index >= givenBlock.schoolList.length) {
-        console.log(
-          fourthLogColour,
-          `${givenBlock.eduBlockName} Block Processed`,
-        )
-        return
-      }
+      console.groupCollapsed(
+        fourthLogColour,
+        `Donwloading ${currentSchool.schoolName} - ${index + 1}/${
+          givenBlock.schoolList.length
+        }`,
+      )
 
-      // function declaration
       try {
-        console.groupCollapsed(
-          fourthLogColour,
-          `Downloading ${currentSchool.schoolName} - ${index + 1}/${
-            givenBlock.schoolList.length
-          }`,
-        )
-
         for (let i = 5; i <= 9; i++) {
           const currentYear = i
-          const schoolLoop = await new Promise(resolve => {
+          await new Promise(resolve => {
             setTimeout(async () => {
-              const trigger = await schoolDownload(currentSchool, currentYear)
-              resolve(trigger)
+              const download = await schoolDownload(currentSchool, currentYear)
+              resolve(download)
             }, delayInterval)
           })
-          await schoolLoop
         }
-        console.groupEnd()
 
-        const result = await new Promise(resolve => {
-          setTimeout(async () => {
-            const trigger = await runSingleSchool(index + 1)
-            resolve(trigger)
-          }, delayInterval)
-        })
-        return result
+        console.groupEnd()
       } catch (error) {
         console.error(errorLogColour, `Error running School: ${error}`)
         throw error
       }
-    }
 
-    // recursive call command
-    return runSingleSchool(0)
+      console.log(fourthLogColour, `${givenBlock.eduBlockName} Block processed`)
+    }
   } catch (error) {
     console.error(errorLogColour, `Error running schools: ${error}`)
     throw error
