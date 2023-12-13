@@ -6,7 +6,7 @@ const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
 
 // Fetch Call to the endpoint in each Block
-const schoolFetch = async (stateId, givenBlock) => {
+const schoolFetch = async (givenStateId, givenBlock) => {
   const givenDistrictName = givenBlock.districtId
   const givenBlockName = givenBlock.eduBlockId
 
@@ -19,7 +19,7 @@ const schoolFetch = async (stateId, givenBlock) => {
         "User-Agent": "insomnia/8.3.0",
       },
       body: new URLSearchParams({
-        stateName: stateId,
+        stateName: givenStateId,
         districtName: givenDistrictName,
         blockName: givenBlockName,
         villageId: "",
@@ -35,17 +35,34 @@ const schoolFetch = async (stateId, givenBlock) => {
       options,
     )
     const parsedResponse = await response.json()
-    const schoolList = parsedResponse.list
+    const schoolList = parsedResponse.list.map(school => {
+      const {
+        schoolId,
+        schoolName,
+        stateId,
+        districtId,
+        blockId,
+        schoolStatus,
+        schMgmtId,
+        isOperational202122,
+      } = school
 
-    // console.dir(schoolList)
+      return {
+        schoolId,
+        schoolName,
+        stateId,
+        districtId,
+        blockId,
+        schoolStatus,
+        schMgmtId,
+        isOperational202122,
+      }
+    })
+
     const updatedBlock = {
       ...givenBlock,
       schoolList,
     }
-    console.log(
-      thirdLogColour,
-      `Fetched ${schoolList.length} schools for ${givenBlock.eduBlockName} Block`,
-    )
 
     return updatedBlock
   } catch (error) {
@@ -79,7 +96,14 @@ const getSchools = async givenDistrict => {
 
       try {
         const processedBlock = await schoolFetch(stateId, currentBlock)
+
         newBlocks.push(processedBlock)
+        console.log(
+          thirdLogColour,
+          `Fetched ${processedBlock.schoolList.length} schools for ${
+            processedBlock.eduBlockName
+          } Block - ${index + 1}/${givenDistrict.blocks.length}`,
+        )
 
         const result = await new Promise(resolve => {
           setTimeout(async () => {
@@ -93,6 +117,7 @@ const getSchools = async givenDistrict => {
           errorLogColour,
           `Error getting schools from ${currentBlock.eduBlockName} block`,
         )
+        throw error
       }
     }
 
