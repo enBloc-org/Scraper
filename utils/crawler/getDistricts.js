@@ -4,8 +4,12 @@ const { firstLogColour, errorLogColour, bgLogColour } = require("../colours.js")
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
-const { insertStates } = require("../../model/states.js")
+const { selectLatest, updateStates } = require("../../model/states.js")
 const { getBlocks } = require("./getBlocks.js")
+
+const mostRecentStatesJSON = selectLatest()
+const mostRecentStates =
+  mostRecentStatesJSON && JSON.parse(mostRecentStatesJSON.states_file)
 
 // Fetch Call to the endpoint in each State
 const districtFetch = async givenState => {
@@ -24,16 +28,15 @@ const districtFetch = async givenState => {
   try {
     const response = await fetch(`${baseURL}/locateSchool/getDistrict`, options)
     const parsedResponse = await response.json()
+    const { stateId, stateName } = givenState
 
     givenState = {
-      ...givenState,
+      stateId,
+      stateName,
       districts: parsedResponse,
     }
 
-    console.log(
-      firstLogColour,
-      `Fetched ${parsedResponse.length} districts for ${givenState.stateName} State`,
-    )
+    console.log(firstLogColour, `Fetched ${parsedResponse.length} districts`)
 
     return givenState
   } catch (error) {
@@ -54,23 +57,45 @@ const getDistricts = async states => {
       // base case
       if (index >= states.length) {
         const newStatesJSON = JSON.stringify(newStates)
-        await insertStates(newStatesJSON)
+        updateStates(newStatesJSON)
         console.log(bgLogColour, "States Object saved to DB")
         return
       }
 
+      // failsafe stores at every second state
+      if (index % 2 === 0 && index !== 0) {
+        const newStatesJSON = JSON.stringify(newStates)
+        updateStates(newStatesJSON)
+        console.log(bgLogColour, "States Object saved to DB")
+      }
+
       // function declaration
-      const currentState = states[index]
+      let currentState = states[index]
+      if (
+        mostRecentStates &&
+        mostRecentStates.length > 0 &&
+        mostRecentStates.length > index
+      ) {
+        currentState = mostRecentStates[index]
+      }
 
       try {
-        console.groupCollapsed()
-        const stateWithDistricts = await districtFetch(currentState)
-        console.groupCollapsed()
-        const stateWithBlocks = await getBlocks(stateWithDistricts)
-        console.groupEnd()
-        console.groupEnd()
+        console.log(
+          firstLogColour,
+          `Processing ${currentState.stateName} State - ${index + 1}/${
+            states.length
+          }`,
+        )
+        if (currentState.hasOwnProperty("districts")) {
+          console.log(`Already in DB`)
+        } else {
+          const stateWithDistricts = await districtFetch(currentState)
+          console.groupCollapsed()
+          const stateWithBlocks = await getBlocks(stateWithDistricts)
+          console.groupEnd()
 
-        newStates.push(stateWithBlocks)
+          newStates.push(stateWithBlocks)
+        }
 
         const result = await new Promise(resolve => {
           setTimeout(async () => {

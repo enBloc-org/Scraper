@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest -o",
     "format": "prettier --write .",
     "format-check": "prettier --check .",
     "prepare": "husky install",
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "crawl": "node --max-old-space-size=8192 crawler.js"
   },
   "repository": {
     "type": "git",
@@ -31,7 +32,9 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-kentcdodds": "^20.5.0",
     "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jest": "^27.6.0",
     "husky": "^8.0.3",
+    "jest": "^29.7.0",
     "prettier": "^3.1.0"
   }
 }
