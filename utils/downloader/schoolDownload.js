@@ -18,6 +18,14 @@ const { errorLogColour, fifthLogColour } = require("../colours.js")
 const schoolDownload = async (givenSchool, currentYear) => {
   const givenSchoolId = givenSchool.schoolId
 
+  const yearValue = {
+    5: "2018-19",
+    6: "2019-20",
+    7: "2020-21",
+    8: "2021-22",
+    9: "2022-23",
+  }
+
   const options = {
     method: "POST",
     headers: {
@@ -29,14 +37,6 @@ const schoolDownload = async (givenSchool, currentYear) => {
       schoolId: givenSchoolId,
       yearId: currentYear,
     }),
-  }
-
-  const yearValue = {
-    5: "2018-19",
-    6: "2019-20",
-    7: "2020-21",
-    8: "2021-22",
-    9: "2022-23",
   }
 
   return new Promise(async (resolve, reject) => {
@@ -91,7 +91,7 @@ const schoolDownload = async (givenSchool, currentYear) => {
 
         const isValidPDF = await validatePDF(pdfFilePath)
         if (isValidPDF) {
-          console.group(fifthLogColour, `${yearValue[currentYear]}`)
+          console.groupCollapsed(fifthLogColour, `${yearValue[currentYear]}`)
           fs.unlinkSync(base64StringPath)
           console.log(`Downloaded`)
 

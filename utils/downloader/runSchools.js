@@ -26,20 +26,48 @@ const runSchools = async givenBlock => {
 
       console.groupCollapsed(
         fourthLogColour,
-        `Donwloading ${currentSchool.schoolName} - ${index + 1}/${
+        `Downloading ${currentSchool.schoolName} - ${index + 1}/${
           givenBlock.schoolList.length
         }`,
       )
 
+      const yearValue = {
+        5: "2018-19",
+        6: "2019-20",
+        7: "2020-21",
+        8: "2021-22",
+        9: "2022-23",
+      }
+
       try {
         for (let i = 5; i <= 9; i++) {
           const currentYear = i
-          await new Promise(resolve => {
-            setTimeout(async () => {
-              const download = await schoolDownload(currentSchool, currentYear)
-              resolve(download)
-            }, delayInterval)
-          })
+
+          if (
+            currentSchool[
+              `isOperational${yearValue[currentYear].replace("-", "")}`
+            ] === 0
+            // currentSchool.isOperational202122 === 0
+          ) {
+            await new Promise(resolve => {
+              setTimeout(async () => {
+                const download = await schoolDownload(
+                  currentSchool,
+                  currentYear,
+                )
+                resolve(download)
+              }, delayInterval)
+            })
+          } else {
+            await new Promise(fullfil => {
+              setTimeout(async () => {
+                const log = console.log(
+                  `Not operational in ${yearValue[currentYear]}`,
+                )
+                fullfil(log)
+              }, delayInterval / 4)
+            })
+          }
         }
 
         console.groupEnd()
@@ -47,8 +75,6 @@ const runSchools = async givenBlock => {
         console.error(errorLogColour, `Error running School: ${error}`)
         throw error
       }
-
-      console.log(fourthLogColour, `${givenBlock.eduBlockName} Block processed`)
     }
   } catch (error) {
     console.error(errorLogColour, `Error running schools: ${error}`)
