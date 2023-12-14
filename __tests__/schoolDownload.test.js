@@ -17,7 +17,9 @@ jest.mock("fs", () => ({
     write: jest.fn().mockResolvedValue(() => {}),
     end: jest.fn().mockResolvedValue(() => {}),
   }),
-  readFileSync: jest.fn().mockResolvedValue(() => {}),
+  readFileSync: jest
+    .fn()
+    .mockReturnValue((string1, string2) => `${string1} ${string2}`),
   unlinkFileSync: jest.fn().mockResolvedValue(() => {}),
 }))
 
@@ -25,44 +27,12 @@ jest.mock("path", () => ({
   join: jest.fn().mockResolvedValue((...strings) => strings.join("/")),
 }))
 
-jest.mock("base64topdf", () => ({
-  base64: jest.fn().mockResolvedValue({
-    base64Decode: jest.fn().mockResolvedValue((string, path) => {
-      if (string) return path
-    }),
-  }),
-}))
-
-jest.mock("pdf-parse", () => {
-  pdfParse: jest.fn().mockResolvedValue(() => {
-    data: jest.fn().mockResolvedValue({
-      text: jest.fn().mockResolvedValue({
-        length: 1,
-      }),
-    })
-  })
-})
-
 jest.mock("../scraper.js", () => ({
   scraper: jest.fn().mockResolvedValue(() => {}),
 }))
 
-// const mockConsoleGroupCollapsed = jest
-//   .spyOn(console, "groupCollapsed")
-//   .mockImplementation(() => {})
-
-// const mockConsoleLog = jest.spyOn(console, "log").mockImplementation(() => {})
-
-// const mockConsoleError = jest
-//   .spyOn(console, "error")
-//   .mockImplementation(() => {})
-
-// const mockConsoleGroupEnd = jest
-//   .spyOn(console, "groupEnd")
-//   .mockImplementation(() => {})
-
 describe("schoolDownload", () => {
-  beforeAll(() => {
+  beforeEach(() => {
     const testSchool = {
       schoolId: 1,
       schoolName: "Test School",
@@ -93,5 +63,9 @@ describe("schoolDownload", () => {
         }),
       }),
     )
+  })
+
+  test("creates a writeStream", () => {
+    expect(require("fs").createWriteStream().on).toHaveBeenCalled()
   })
 })

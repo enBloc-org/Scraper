@@ -1,19 +1,14 @@
 const path = require("path")
 const fs = require("fs")
-const base64 = require("base64topdf")
-const pdfParse = require("pdf-parse")
 
 const requestCookie = process.env.COOKIE
-const delayInterval = process.env.DELAY
-const { scraper } = require("../../scraper.js")
 const { errorLogColour, fifthLogColour } = require("../colours.js")
 
 /**
  *
  * @param {*} givenSchool should be the full object of the school being currently processed
  * @param {*} currentYear should always be a number between 5 and 9 as it will be passed as a param in the fetch request
- * @returns a promise which will be fulfilled if the pdf targeted has been downloaded and successfuly parsed
- * @remarks this function will be called for each school and once per year code available from within runSchools.js
+ * @returns a promise which will be fulfilled if the fetch call is successful and a base64 file has been created
  */
 const schoolDownload = async (givenSchool, currentYear) => {
   const givenSchoolId = givenSchool.schoolId
@@ -50,93 +45,31 @@ const schoolDownload = async (givenSchool, currentYear) => {
       const base64StringPath = path.join(
         __dirname,
         "downloads",
+        "base64",
         `${yearValue[currentYear]}_${givenSchool.schoolName.replace(" ", "-")}`,
       )
       const pdfWriteStream = fs.createWriteStream(base64StringPath)
 
-      // helper function
-      /**
-       * @returns this function will resolve the promise made at the top level of schoolDownload once a pdf file is successfully parsed
-       * @remarks this function will be recalled if the download of the target pdf is not successful
-       */
-      const convertBase64 = async () => {
-        const base64String = fs.readFileSync(base64StringPath, "utf-8")
-        const pdfFilePath = path.join(
-          __dirname,
-          "downloads",
-          `${yearValue[currentYear]}-${givenSchool.schoolName}.pdf`,
-        )
-
-        // helper function
-        /**
-         *
-         * @param {*} pdfFile should be the path created for a pdf file to be written from the decoded base64 download returned from our fetch call
-         * @returns a boolean conditional on whether the target pdf has a valid pdf structure
-         */
-        const validatePDF = async pdfFile => {
-          try {
-            const data = await pdfParse(pdfFile)
-            return data && data.text && data.text.length > 0
-          } catch (error) {
-            return false
-          }
-        }
-
-        await new Promise(deliver => {
-          setTimeout(() => {
-            const trigger = base64.base64Decode(base64String, pdfFilePath)
-            deliver(trigger)
-          }, delayInterval / 2)
-        })
-
-        const isValidPDF = await validatePDF(pdfFilePath)
-        if (isValidPDF) {
-          console.groupCollapsed(fifthLogColour, `${yearValue[currentYear]}`)
-          fs.unlinkSync(base64StringPath)
-          console.log(`Downloaded`)
-
-          await new Promise(close => {
-            setTimeout(async () => {
-              const scrape = await scraper(pdfFilePath)
-              close(scrape)
-            }, delayInterval / 2)
-          })
-
-          fs.unlinkSync(pdfFilePath)
-          console.groupEnd()
-
-          resolve()
-        } else {
-          fs.unlinkSync(pdfFilePath)
-          setTimeout(() => {
-            return convertBase64()
-          }, delayInterval * 2)
-        }
-      }
-
-      /**
-       *
-       * @returns base64 string to be decoded into a pdf
-       * @remarks recursive function processing data stream from our fetch call
-       */
-      const pump = async () => {
+      const writeBase64File = async () => {
         const { done, value } = await reader.read()
 
         // base case
         if (done) {
           pdfWriteStream.end()
-          await convertBase64()
+          fs.readFileSync(base64StringPath, "utf-8")
+          console.log(fifthLogColour, `${yearValue[currentYear]} Downloaded`)
+          resolve()
           return
         }
 
         // function declaration
         pdfWriteStream.write(value, "binary")
-        await pump()
+        await writeBase64File()
       }
 
       // recursive call command
       pdfWriteStream.on("open", async () => {
-        await pump()
+        await writeBase64File()
       })
     } catch (error) {
       console.error(errorLogColour, `Error downloading pdf: ${error}`)
