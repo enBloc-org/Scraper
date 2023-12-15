@@ -45,7 +45,6 @@ const schoolDownload = async (givenSchool, currentYear) => {
       const base64StringPath = path.join(
         __dirname,
         "downloads",
-        "base64",
         `${yearValue[currentYear]}_${givenSchool.schoolName.replace(" ", "-")}`,
       )
       const pdfWriteStream = fs.createWriteStream(base64StringPath)
@@ -56,7 +55,6 @@ const schoolDownload = async (givenSchool, currentYear) => {
         // base case
         if (done) {
           pdfWriteStream.end()
-          fs.readFileSync(base64StringPath, "utf-8")
           console.log(fifthLogColour, `${yearValue[currentYear]} Downloaded`)
           resolve()
           return

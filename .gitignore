@@ -3,3 +3,4 @@ statesDB.sql
 test.db
 /node_modules
 downloader/downloads/**
+converter/downloads/**

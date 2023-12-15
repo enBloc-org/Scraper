@@ -7,11 +7,21 @@ global.fetch = jest.fn().mockResolvedValue({
         schoolId: 1,
         schoolName: "First School",
         extraProperty: "I should not be here",
+        isOperational201819: 0,
+        isOperational201920: 0,
+        isoperational202021: 1,
+        isoperational202122: 0,
+        isoperational202223: 1,
       },
       {
         schoolId: 2,
         schoolName: "Second School",
         extraProperty: "I should not be here",
+        isOperational201819: 0,
+        isOperational201920: 0,
+        isoperational202021: 1,
+        isoperational202122: 0,
+        isoperational202223: 1,
       },
     ],
   }),
@@ -70,5 +80,16 @@ describe("getSchools", () => {
     const hasExtraProperty = firstSchool.hasOwnProperty("extraProperty")
 
     expect(hasExtraProperty).toBe(false)
+  })
+
+  test("stores 'isOperational' value for 5 school years", () => {
+    const firstSchool = result.blocks[0].schoolList[0]
+    const hasOperationalData202122 = firstSchool.hasOwnProperty(
+      "isOperational202122",
+    )
+    const numberOfKeys = Object.keys(firstSchool).length
+
+    expect(hasOperationalData202122).toBe(true)
+    expect(numberOfKeys).toBe(12)
   })
 })
