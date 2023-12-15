@@ -4,7 +4,7 @@ const fs = require("fs")
 const base64 = require("base64topdf")
 
 const delayInterval = process.env.DELAY
-const { fifthLogColour } = require("../colours.js")
+const { firstLogColour } = require("../colours.js")
 
 const downloadsDir = path.join(__dirname, "downloads")
 if (!fs.existsSync(downloadsDir)) {
@@ -16,14 +16,14 @@ const convertBase64 = async base64StringPath => {
   const baseTitle = path.basename(base64StringPath)
   const pdfFilePath = path.join(__dirname, "downloads", `${baseTitle}.pdf`)
 
-  console.groupCollapsed(fifthLogColour, `${baseTitle}`)
+  console.groupCollapsed()
   await new Promise(deliver => {
     setTimeout(() => {
       const trigger = base64.base64Decode(base64String, pdfFilePath)
       deliver(trigger)
     }, delayInterval / 2)
   })
-  console.log("downloaded")
+  console.log(firstLogColour, `${baseTitle.replace("_", " ")} converted to PDF`)
   // fs.unlinkSync(base64StringPath)
 
   console.groupEnd()

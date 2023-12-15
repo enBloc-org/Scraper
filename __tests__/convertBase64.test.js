@@ -52,11 +52,11 @@ describe("convertBase64", () => {
   })
 
   test("logs the process for dev experience", () => {
-    expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith(
-      "\u001b[32m",
-      "2018-19_testFile",
+    expect(mockConsoleGroupCollapsed).toHaveBeenCalledWith()
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      "\u001b[0m\u001b[34m",
+      "2018-19 testFile converted to PDF",
     )
-    expect(mockConsoleLog).toHaveBeenCalledWith("downloaded")
     expect(mockConsoleGroupEnd).toHaveBeenCalled()
   })
 })
