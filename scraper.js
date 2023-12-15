@@ -7,4 +7,4 @@ const scraper = async pdfPath => {
   console.log(`Scraped`)
 }
 
-module.exports = { scraper }
+scraper()
