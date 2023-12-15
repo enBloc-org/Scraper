@@ -6,6 +6,11 @@ const base64 = require("base64topdf")
 const delayInterval = process.env.DELAY
 const { fifthLogColour } = require("../colours.js")
 
+const downloadsDir = path.join(__dirname, "downloads")
+if (!fs.existsSync(downloadsDir)) {
+  fs.mkdirSync(downloadsDir)
+}
+
 const convertBase64 = async base64StringPath => {
   const base64String = fs.readFileSync(base64StringPath, "utf-8")
   const baseTitle = path.basename(base64StringPath)
