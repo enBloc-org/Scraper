@@ -63,16 +63,20 @@ const createObject = textContent => {
   return tableData
 }
 
-const processTableData = url => {
-  const loadingTask = getDocument(url)
-  loadingTask.promise
-    .then(parseDocument)
-    .then(createObject)
-    .then(tableData => console.log(tableData))
-    .catch(err => {
-      console.error(`Error: ${err}`)
-    })
+const processTableData = async url => {
+  try {
+    const loadingTask = getDocument(url)
+    const pdfDocument = await loadingTask.promise
+    const parsedDocument = await parseDocument(pdfDocument)
+    const tableData = createObject(parsedDocument)
+    return tableData
+  } catch (err) {
+    console.error(`Error: ${err}`)
+  }
 }
 
+processTableData(
+  "/Users/eazzopardi/code/agency-scraper/school report card 2.pdf",
+)
 
 export default processTableData
