@@ -1,16 +1,16 @@
-import parseLocalPDF from "./utils/scraper/processGeneralData.js"
+import processGeneralData from "./utils/scraper/processGeneralData.js"
 import processTableData from "./utils/scraper/processTableData.js"
 import insertSchoolData from "./model/school_data.js"
-import insertTableData from "./model/table_data.js"
+
 
 const scraper = async pdfPath => {
-  const pdfSchoolData = await parseLocalPDF(pdfPath)
+  const pdfSchoolData = await processGeneralData(pdfPath)
+  const tableData = await processTableData(pdfPath)
+  
+  pdfSchoolData.push(tableData)
+
   insertSchoolData(pdfSchoolData)
+  
 }
 
-// const tableData = processTableData(
-//   "/Users/eazzopardi/code/agency-scraper/sample report card (1).pdf",
-// )
-// insertTableData(tableData)
-
-
+scraper("/Users/eazzopardi/code/agency-scraper/school report card 2.pdf")
