@@ -9,7 +9,9 @@
     "format-check": "prettier --check .",
     "prepare": "husky install",
     "lint": "npx eslint .",
-    "crawl": "node --max-old-space-size=8192 crawler.js"
+    "crawl": "node --max-old-space-size=8192 crawler.js",
+    "download": "node --max-old-space-size=8192 downloader.js",
+    "convert": "node --max-old-space-size=8192 converter.js"
   },
   "repository": {
     "type": "git",

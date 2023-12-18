@@ -44,7 +44,11 @@ const schoolFetch = async (givenStateId, givenBlock) => {
         blockId,
         schoolStatus,
         schMgmtId,
-        isOperational202122,
+        isOperational201819,
+        isOperational201920,
+        isoperational202021: isOperational202021,
+        isoperational202122: isOperational202122,
+        isoperational202223: isOperational202223,
       } = school
 
       return {
@@ -55,7 +59,11 @@ const schoolFetch = async (givenStateId, givenBlock) => {
         blockId,
         schoolStatus,
         schMgmtId,
+        isOperational201819,
+        isOperational201920,
+        isOperational202021,
         isOperational202122,
+        isOperational202223,
       }
     })
 
