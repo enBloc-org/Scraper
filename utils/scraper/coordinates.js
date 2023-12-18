@@ -142,22 +142,8 @@ const enrolment_and_minority = {
         xmin: 495,
         xmax: 502,
       },
-    },
-    total: {
-      b: {
-        xmin: 514,
-        xmax: 520,
-      },
-      g: {
-        xmin: 534,
-        xmax: 541,
-      },
-      all: {
-        xmin: 553,
-        xmax: 560,
-      },
-    },
-  },
+    }
+  }
 }
 
 export default enrolment_and_minority
