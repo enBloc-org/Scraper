@@ -1,11 +1,7 @@
-const db = require("../database/school_data_db")
+import db from "../database/school_data_db.js"
 
 const insertTableData = async tableData => {
-    const columns = tableData
-    .map(obj =>
-        console.log(Object.entries(obj)))
-
-
+  const columns = tableData.map(obj => console.log(Object.entries(obj)))
 }
 
-module.exports = insertTableData
+export default insertTableData
