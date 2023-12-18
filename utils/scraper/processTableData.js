@@ -74,8 +74,5 @@ const processTableData = url => {
     })
 }
 
-processTableData(
-  "/Users/eazzopardi/code/agency-scraper/sample report card (1).pdf",
-)
 
 export default processTableData
