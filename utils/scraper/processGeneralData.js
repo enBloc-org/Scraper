@@ -1,8 +1,9 @@
-const fs = require("fs")
-const pdf = require("pdf-parse")
+import { readFileSync } from "fs"
+import pdf from "pdf-parse"
 
-const mapVariablesToColumns = require("./mapVariablesToColumns")
-const variablesArr = Object.keys(mapVariablesToColumns)
+import variables from "./variables.js"
+
+const variablesArr = Object.keys(variables)
 variablesArr.push("Visit of school for / by")
 
 const processGeneralData = async pdfText => {
@@ -22,7 +23,7 @@ const processGeneralData = async pdfText => {
       const value = allValues[i + 1]
 
       if (!variablesArr.includes(value)) {
-        const columns = mapVariablesToColumns[splitWord]
+        const columns = variables[splitWord]
         const dataObject = { [columns]: value }
         schoolDataArr.push(dataObject)
       }
@@ -33,14 +34,14 @@ const processGeneralData = async pdfText => {
 }
 
 const parseLocalPDF = async pdfPath => {
-  const dataBuffer = fs.readFileSync(pdfPath)
-  // temporarily limit parsing to the first page only
+  const dataBuffer = readFileSync(pdfPath)
   const options = {
     max: 1,
   }
   const pdfdata = await pdf(dataBuffer, options)
   const processedData = processGeneralData(pdfdata.text)
   return processedData
+  
 }
 
-module.exports = parseLocalPDF
+export default parseLocalPDF
