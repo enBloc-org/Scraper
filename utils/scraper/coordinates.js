@@ -160,4 +160,4 @@ const enrolment_and_minority = {
   },
 }
 
-module.exports = enrolment_and_minority
+export default enrolment_and_minority
