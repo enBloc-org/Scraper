@@ -1,5 +1,5 @@
-const getDocument = require("pdfjs-dist")
-const enrolment_and_minority = require("./coordinates.js")
+import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs"
+import enrolment_and_minority from "./coordinates.js"
 
 const parseDocument = pdf => {
   return pdf.getPage(2).then(page => page.getTextContent())
@@ -74,4 +74,8 @@ const processTableData = url => {
     })
 }
 
-module.exports = processTableData
+processTableData(
+  "/Users/eazzopardi/code/agency-scraper/sample report card (1).pdf",
+)
+
+export default processTableData
