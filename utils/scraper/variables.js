@@ -91,4 +91,4 @@ const variables = {
   "Pursuing any Relevant Professional Course": "tqual_pursue",
 }
 
-module.exports = variables
+export default variables
