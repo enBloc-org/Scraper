@@ -1,7 +1,6 @@
 import db from "../database/school_data_db.js"
 
 const insertSchoolData = async schoolData => {
-  console.log(schoolData)
   const columns = schoolData
     .map(obj =>
       Object.entries(obj)
