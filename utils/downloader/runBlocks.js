@@ -1,10 +1,10 @@
-require("dotenv").config()
+import "dotenv/config"
 
-const delayInterval = process.env.DELAY
-const { errorLogColour, thirdLogColour } = require("../colours")
-const { runSchools } = require("./runSchools")
+import { errorLogColour, thirdLogColour } from "../colours.js"
+import { runSchools } from "./runSchools.js"
+const delayInterval = process.env.delayInterval
 
-const runBlocks = async givenDistrict => {
+export const runBlocks = async givenDistrict => {
   try {
     for (let index = 0; index < givenDistrict.blocks.length; index++) {
       const currentBlock = givenDistrict.blocks[index]
@@ -37,5 +37,3 @@ const runBlocks = async givenDistrict => {
     throw error
   }
 }
-
-module.exports = { runBlocks }

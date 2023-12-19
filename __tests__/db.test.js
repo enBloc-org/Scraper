@@ -1,6 +1,6 @@
-require("dotenv").config()
+import "dotenv/config.js"
 
-const { updateStates, selectAll } = require("../model/states.js")
+import { updateStates, selectAll } from "../model/states.js"
 
 const testState = process.env.STATES_LIST
 

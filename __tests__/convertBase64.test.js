@@ -1,13 +1,17 @@
-require("dotenv").config()
-const path = require("path")
-const fs = require("fs")
+import "dotenv/config.js"
+import path from "path"
+import fs from "fs"
+import { jest } from "@jest/globals"
+import base64 from "base64topdf"
 
-const { convertBase64 } = require("../utils/converter/convertBase64.js")
+import { convertBase64 } from "../utils/converter/convertBase64.js"
+
+const __dirname = new URL(".", import.meta.url).pathname
 const projectRoot = path.resolve(__dirname, "..")
 
-jest.mock("base64topdf", () => ({
-  base64Decode: jest.fn().mockResolvedValue(() => {}),
-}))
+const mockBase64Decoder = jest
+  .spyOn(base64, "base64Decode")
+  .mockImplementation(() => {})
 
 const mockConsoleGroupCollapsed = jest
   .spyOn(console, "groupCollapsed")
@@ -45,10 +49,7 @@ describe("convertBase64", () => {
       "2018-19_testFile.pdf",
     )
 
-    expect(require("base64topdf").base64Decode).toHaveBeenCalledWith(
-      "Test String",
-      newFilePath,
-    )
+    expect(mockBase64Decoder).toHaveBeenCalledWith("Test String", newFilePath)
   })
 
   test("logs the process for dev experience", () => {

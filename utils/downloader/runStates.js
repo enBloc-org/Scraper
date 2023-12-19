@@ -1,8 +1,9 @@
-require("dotenv").config()
+import "dotenv/config"
+
+import { errorLogColour, firstLogColour } from "../colours.js"
+import { runDistricts } from "./runDistricts.js"
 
 const delayInterval = process.env.DELAY
-const { errorLogColour, firstLogColour } = require("../colours")
-const { runDistricts } = require("./runDistricts")
 
 /**
  *
@@ -10,7 +11,7 @@ const { runDistricts } = require("./runDistricts")
  * @returns a pdf for each available year in each school
  * @remarks this is a recursive function that calls each school endpoint in sucession
  */
-const runStates = async states => {
+export const runStates = async states => {
   try {
     for (let index = 0; index < states.length; index++) {
       const currentState = states[index]
@@ -41,5 +42,3 @@ const runStates = async states => {
     throw error
   }
 }
-
-module.exports = { runStates }

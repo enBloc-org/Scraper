@@ -1,8 +1,10 @@
-const path = require("path")
-const fs = require("fs")
+import path from "path"
+import fs from "fs"
+
+import { errorLogColour, fifthLogColour } from "../colours.js"
 
 const requestCookie = process.env.COOKIE
-const { errorLogColour, fifthLogColour } = require("../colours.js")
+const __dirname = new URL(".", import.meta.url).pathname
 
 /**
  *
@@ -10,7 +12,7 @@ const { errorLogColour, fifthLogColour } = require("../colours.js")
  * @param {*} currentYear should always be a number between 5 and 9 as it will be passed as a param in the fetch request
  * @returns a promise which will be fulfilled if the fetch call is successful and a base64 file has been created
  */
-const schoolDownload = async (givenSchool, currentYear) => {
+export const schoolDownload = async (givenSchool, currentYear) => {
   const givenSchoolId = givenSchool.schoolId
 
   const yearValue = {
@@ -35,6 +37,15 @@ const schoolDownload = async (givenSchool, currentYear) => {
   }
 
   return new Promise(async (resolve, reject) => {
+    const base64StringPath = path.join(
+      __dirname,
+      "downloads",
+      `${yearValue[currentYear]}_${givenSchool.schoolName.replace(
+        /[/?<>\\:*|"\s]/g,
+        "-",
+      )}`,
+    )
+
     try {
       const response = await fetch(
         "https://src.udiseplus.gov.in/NewReportCard/PdfReportSchId",
@@ -42,11 +53,6 @@ const schoolDownload = async (givenSchool, currentYear) => {
       )
       const reader = response.body.getReader()
 
-      const base64StringPath = path.join(
-        __dirname,
-        "downloads",
-        `${yearValue[currentYear]}_${givenSchool.schoolName.replace(" ", "-")}`,
-      )
       const pdfWriteStream = fs.createWriteStream(base64StringPath)
 
       const writeBase64File = async () => {
@@ -56,6 +62,7 @@ const schoolDownload = async (givenSchool, currentYear) => {
         if (done) {
           pdfWriteStream.end()
           console.log(fifthLogColour, `${yearValue[currentYear]} Downloaded`)
+          fs.unwatchFile(base64StringPath)
           resolve()
           return
         }
@@ -75,5 +82,3 @@ const schoolDownload = async (givenSchool, currentYear) => {
     }
   })
 }
-
-module.exports = { schoolDownload }
