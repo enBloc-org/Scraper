@@ -1,146 +1,185 @@
 const enrolment_and_minority = {
-  gen: 757.25,
-  sc: 745.75,
-  st: 735,
-  obc: 724.25,
-  musl: 678.75,
-  chris: 668,
-  sikh: 657.25,
-  budh: 646.5,
-  parsi: 636.5,
-  jain: 626.5,
-  other: 616.5,
-  bpl: 574.25,
-  cwsn: 553.5,
+  gen: {
+    ymin: 755,
+    ymax: 759,
+  },
+  sc: {
+    ymin: 743,
+    ymax: 747,
+  },
+  st: {
+    ymin: 733,
+    ymax: 737,
+  },
+  obc: {
+    ymin: 722,
+    ymax: 726,
+  },
+  musl: {
+    ymin: 676,
+    ymax: 680,
+  },
+  chris: {
+    ymin: 666,
+    ymax: 670,
+  },
+  sikh: {
+    ymin: 655,
+    ymax: 659,
+  },
+  budh: {
+    ymin: 644,
+    ymax: 648,
+  },
+  parsi: {
+    ymin: 634,
+    ymax: 638,
+  },
+  jain: {
+    ymin: 624,
+    ymax: 628,
+  },
+  other: {
+    ymin: 614,
+    ymax: 618,
+  },
+  bpl: {
+    ymin: 572,
+    ymax: 581,
+  },
+  cwsn: {
+    ymin: 551,
+    ymax: 555,
+  },
   grade: {
     "Pre-Pr": {
       b: {
-        xmin: 54,
-        xmax: 61,
+        xmin: 53,
+        xmax: 62,
       },
       g: {
-        xmin: 70,
-        xmax: 78,
+        xmin: 69,
+        xmax: 79,
       },
     },
     1: {
       b: {
-        xmin: 87,
-        xmax: 95,
+        xmin: 86,
+        xmax: 96,
       },
       g: {
-        xmin: 105,
-        xmax: 113,
+        xmin: 104,
+        xmax: 114,
       },
     },
     2: {
       b: {
-        xmin: 123,
-        xmax: 130,
+        xmin: 122,
+        xmax: 131,
       },
       g: {
-        xmin: 140,
-        xmax: 148,
+        xmin: 139,
+        xmax: 149,
       },
     },
     3: {
       b: {
-        xmin: 158,
-        xmax: 166,
+        xmin: 157,
+        xmax: 167,
       },
       g: {
-        xmin: 176,
-        xmax: 184,
+        xmin: 175,
+        xmax: 185,
       },
     },
     4: {
       b: {
-        xmin: 194,
-        xmax: 201,
+        xmin: 193,
+        xmax: 202,
       },
       g: {
-        xmin: 212,
-        xmax: 219,
+        xmin: 211,
+        xmax: 220,
       },
     },
     5: {
       b: {
-        xmin: 230,
-        xmax: 236,
+        xmin: 229,
+        xmax: 237,
       },
       g: {
-        xmin: 247,
-        xmax: 254,
+        xmin: 246,
+        xmax: 255,
       },
     },
     6: {
       b: {
-        xmin: 266,
-        xmax: 272,
+        xmin: 265,
+        xmax: 273,
       },
       g: {
-        xmin: 283,
-        xmax: 290,
+        xmin: 282,
+        xmax: 291,
       },
     },
     7: {
       b: {
-        xmin: 301,
-        xmax: 307,
+        xmin: 300,
+        xmax: 308,
       },
       g: {
-        xmin: 318,
-        xmax: 325,
+        xmin: 317,
+        xmax: 326,
       },
     },
     8: {
       b: {
-        xmin: 337,
-        xmax: 343,
+        xmin: 336,
+        xmax: 344,
       },
       g: {
-        xmin: 354,
-        xmax: 361,
+        xmin: 353,
+        xmax: 362,
       },
     },
     9: {
       b: {
-        xmin: 372,
-        xmax: 378,
+        xmin: 371,
+        xmax: 379,
       },
       g: {
-        xmin: 389,
-        xmax: 397,
+        xmin: 388,
+        xmax: 398,
       },
     },
     10: {
       b: {
-        xmin: 408,
-        xmax: 414,
+        xmin: 407,
+        xmax: 415,
       },
       g: {
-        xmin: 425,
-        xmax: 432,
+        xmin: 424,
+        xmax: 433,
       },
     },
     11: {
       b: {
-        xmin: 443,
-        xmax: 449,
+        xmin: 442,
+        xmax: 450,
       },
       g: {
-        xmin: 460,
-        xmax: 468,
+        xmin: 459,
+        xmax: 469,
       },
     },
     12: {
       b: {
-        xmin: 478,
-        xmax: 484,
+        xmin: 477,
+        xmax: 485,
       },
       g: {
-        xmin: 495,
-        xmax: 502,
+        xmin: 494,
+        xmax: 503,
       },
     }
   }
