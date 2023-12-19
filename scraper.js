@@ -10,7 +10,7 @@ const scraper = async pdfPath => {
   pdfSchoolData.push(tableData)
 
   insertSchoolData(pdfSchoolData)
-  
+
 }
 
-scraper("/Users/eazzopardi/code/agency-scraper/school report card 2.pdf")
+export default scraper
