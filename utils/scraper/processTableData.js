@@ -1,4 +1,3 @@
-// import fs from 'fs'
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs"
 import enrolment_and_minority from "./coordinates.js"
 
@@ -55,13 +54,6 @@ const createObject = textContent => {
   }))
 
 
-  // let listitems = ' '
-  // items.forEach(item => {
-  //   listitems += `Text: ${item.text}, X: ${item.x}, Y: ${item.y}\n`; // Append each item to listitems
-  // });
-  // fs.writeFileSync('output.txt', listitems)
-
-
   const results = items.flatMap(item =>
     processItem(item, enrolment_and_minority),
   )
@@ -88,5 +80,3 @@ const processTableData = async pdf => {
 }
 
 export default processTableData
-
-// processTableData("/Users/eazzopardi/code/agency-scraper/sample report card (1).pdf")
