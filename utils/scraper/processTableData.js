@@ -1,3 +1,4 @@
+// import fs from 'fs'
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs"
 import enrolment_and_minority from "./coordinates.js"
 
@@ -5,11 +6,11 @@ const parseDocument = pdf => {
   return pdf.getPage(2).then(page => page.getTextContent())
 }
 
-const processColumn = (item, gradeData, grade, y, row) => {
+const processColumn = (item, gradeData, grade, row) => {
   for (const col in gradeData) {
     if (gradeData.hasOwnProperty(col)) {
       const { xmin, xmax } = gradeData[col]
-      if (item.x >= xmin && item.x <= xmax && Math.abs(item.y - y) <= 1) {
+      if (item.x >= xmin && item.x <= xmax) {
         return { key: `${row}_${grade}_${col}`, value: item.text }
       }
     }
@@ -17,12 +18,12 @@ const processColumn = (item, gradeData, grade, y, row) => {
   return null
 }
 
-const processGrade = (item, grades, y, row) => {
+const processGrade = (item, grades, row) => {
   const results = []
   for (const grade in grades) {
     if (grades.hasOwnProperty(grade)) {
       const gradeData = grades[grade]
-      const result = processColumn(item, gradeData, grade, y, row)
+      const result = processColumn(item, gradeData, grade, row)
       if (result) {
         results.push(result)
       }
@@ -35,9 +36,11 @@ const processItem = (item, obj) => {
   const results = []
   for (const row in obj) {
     if (row !== "grade" && obj.hasOwnProperty(row)) {
-      const y = obj[row]
-      const rowData = processGrade(item, obj.grade, y, row)
-      results.push(...rowData)
+      const { ymin, ymax } = obj[row];
+      if (item.y >= ymin && item.y <= ymax) {
+        const rowData = processGrade(item, obj.grade, row);
+        results.push(...rowData);
+      }
     }
   }
   return results
@@ -48,7 +51,16 @@ const createObject = textContent => {
     text: item.str,
     x: item.transform[4], // x-coordinate
     y: item.transform[5], // y-coordinate
+  
   }))
+
+
+  // let listitems = ' '
+  // items.forEach(item => {
+  //   listitems += `Text: ${item.text}, X: ${item.x}, Y: ${item.y}\n`; // Append each item to listitems
+  // });
+  // fs.writeFileSync('output.txt', listitems)
+
 
   const results = items.flatMap(item =>
     processItem(item, enrolment_and_minority),
@@ -63,9 +75,9 @@ const createObject = textContent => {
   return tableData
 }
 
-const processTableData = async url => {
+const processTableData = async pdf => {
   try {
-    const loadingTask = getDocument(url)
+    const loadingTask = getDocument(pdf)
     const pdfDocument = await loadingTask.promise
     const parsedDocument = await parseDocument(pdfDocument)
     const tableData = createObject(parsedDocument)
@@ -75,8 +87,6 @@ const processTableData = async url => {
   }
 }
 
-processTableData(
-  "/Users/eazzopardi/code/agency-scraper/school report card 2.pdf",
-)
-
 export default processTableData
+
+// processTableData("/Users/eazzopardi/code/agency-scraper/sample report card (1).pdf")
