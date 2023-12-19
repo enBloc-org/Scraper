@@ -11,6 +11,7 @@ const scraper = async pdfPath => {
 
   insertSchoolData(pdfSchoolData)
 
+  console.log(`Scraped`)
 }
 
 export default scraper

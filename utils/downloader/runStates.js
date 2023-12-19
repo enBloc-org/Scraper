@@ -12,16 +12,9 @@ const { runDistricts } = require("./runDistricts")
  */
 const runStates = async states => {
   try {
-    const runSingleState = async index => {
+    for (let index = 0; index < states.length; index++) {
       const currentState = states[index]
-      // base case
-      if (index >= states.length) {
-        console.log(firstLogColour, `All States Processed`)
 
-        return
-      }
-
-      // function declaration
       try {
         console.groupCollapsed(
           firstLogColour,
@@ -30,28 +23,19 @@ const runStates = async states => {
           }`,
         )
 
-        await runDistricts(currentState)
-
-        console.groupEnd()
-
-        const result = await new Promise(resolve => {
+        await new Promise(resolve => {
           setTimeout(async () => {
-            const trigger = await runSingleState(index + 1)
+            const trigger = await runDistricts(currentState)
             resolve(trigger)
           }, delayInterval)
         })
-        return result
+
+        console.groupEnd()
       } catch (error) {
-        console.error(
-          errorLogColour,
-          `Error processing ${currentState.stateName} State: ${error}`,
-        )
+        console.error(errorLogColour, `Error running State: ${error}`)
         throw error
       }
     }
-
-    // recursive call command
-    return runSingleState(0)
   } catch (error) {
     console.error(errorLogColour, `Error running States: ${error}`)
     throw error

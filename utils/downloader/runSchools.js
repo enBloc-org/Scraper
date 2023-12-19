@@ -21,54 +21,61 @@ if (!fs.existsSync(downloadsDir)) {
  */
 const runSchools = async givenBlock => {
   try {
-    const runSingleSchool = async index => {
+    for (let index = 0; index < givenBlock.schoolList.length; index++) {
       const currentSchool = givenBlock.schoolList[index]
 
-      // base case
-      if (index >= givenBlock.schoolList.length) {
-        console.log(
-          fourthLogColour,
-          `${givenBlock.eduBlockName} Block Processed`,
-        )
-        return
+      console.groupCollapsed(
+        fourthLogColour,
+        `Downloading ${currentSchool.schoolName} - ${index + 1}/${
+          givenBlock.schoolList.length
+        }`,
+      )
+
+      const yearValue = {
+        5: "2018-19",
+        6: "2019-20",
+        7: "2020-21",
+        8: "2021-22",
+        9: "2022-23",
       }
 
-      // function declaration
       try {
-        console.groupCollapsed(
-          fourthLogColour,
-          `Downloading ${currentSchool.schoolName} - ${index + 1}/${
-            givenBlock.schoolList.length
-          }`,
-        )
-
         for (let i = 5; i <= 9; i++) {
           const currentYear = i
-          const schoolLoop = await new Promise(resolve => {
-            setTimeout(async () => {
-              const trigger = await schoolDownload(currentSchool, currentYear)
-              resolve(trigger)
-            }, delayInterval)
-          })
-          await schoolLoop
-        }
-        console.groupEnd()
 
-        const result = await new Promise(resolve => {
-          setTimeout(async () => {
-            const trigger = await runSingleSchool(index + 1)
-            resolve(trigger)
-          }, delayInterval)
-        })
-        return result
+          if (
+            currentSchool[
+              `isOperational${yearValue[currentYear].replace("-", "")}`
+            ] === 0
+            // currentSchool.isOperational202122 === 0
+          ) {
+            await new Promise(resolve => {
+              setTimeout(async () => {
+                const download = await schoolDownload(
+                  currentSchool,
+                  currentYear,
+                )
+                resolve(download)
+              }, delayInterval)
+            })
+          } else {
+            await new Promise(fullfil => {
+              setTimeout(async () => {
+                const log = console.log(
+                  `Not operational in ${yearValue[currentYear]}`,
+                )
+                fullfil(log)
+              }, delayInterval / 4)
+            })
+          }
+        }
+
+        console.groupEnd()
       } catch (error) {
         console.error(errorLogColour, `Error running School: ${error}`)
         throw error
       }
     }
-
-    // recursive call command
-    return runSingleSchool(0)
   } catch (error) {
     console.error(errorLogColour, `Error running schools: ${error}`)
     throw error
