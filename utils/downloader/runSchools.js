@@ -45,10 +45,9 @@ export const runSchools = async givenBlock => {
           const fileName = path.join(
             __dirname,
             "downloads",
-            `${yearValue[currentYear]}_${currentSchool.schoolName.replace(
-              /[/?<>\\:*|"\s]/g,
-              "-",
-            )}`,
+            `${currentSchool.districtId}-${currentSchool.blockId}_${
+              yearValue[currentYear]
+            }_${currentSchool.schoolName.replace(/[/?<>\\:*|"\s]/g, "-")}`,
           )
 
           if (fs.existsSync(fileName)) {
@@ -62,7 +61,11 @@ export const runSchools = async givenBlock => {
             ] === 0
           ) {
             await new Promise(async resolve => {
-              const download = await schoolDownload(currentSchool, currentYear)
+              const download = await schoolDownload(
+                currentSchool,
+                currentYear,
+                fileName,
+              )
               resolve(download)
             })
           } else {

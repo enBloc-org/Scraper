@@ -1,10 +1,8 @@
-import path from "path"
 import fs from "fs"
 
 import { errorLogColour, fifthLogColour } from "../colours.js"
 
 const requestCookie = process.env.COOKIE
-const __dirname = new URL(".", import.meta.url).pathname
 
 /**
  *
@@ -12,7 +10,11 @@ const __dirname = new URL(".", import.meta.url).pathname
  * @param {*} currentYear should always be a number between 5 and 9 as it will be passed as a param in the fetch request
  * @returns a promise which will be fulfilled if the fetch call is successful and a base64 file has been created
  */
-export const schoolDownload = async (givenSchool, currentYear) => {
+export const schoolDownload = async (
+  givenSchool,
+  currentYear,
+  base64StringPath,
+) => {
   const givenSchoolId = givenSchool.schoolId
 
   const yearValue = {
@@ -37,15 +39,6 @@ export const schoolDownload = async (givenSchool, currentYear) => {
   }
 
   return new Promise(async (resolve, reject) => {
-    const base64StringPath = path.join(
-      __dirname,
-      "downloads",
-      `${yearValue[currentYear]}_${givenSchool.schoolName.replace(
-        /[/?<>\\:*|"\s]/g,
-        "-",
-      )}`,
-    )
-
     try {
       const response = await fetch(
         "https://src.udiseplus.gov.in/NewReportCard/PdfReportSchId",
