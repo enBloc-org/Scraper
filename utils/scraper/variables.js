@@ -1,4 +1,4 @@
-const mapVariablesToColumns = {
+const variables = {
   "UDISE CODE": "udise_code",
   Year: "year", // this is incomplete
   "School Name": "schoolname",
@@ -91,4 +91,4 @@ const mapVariablesToColumns = {
   "Pursuing any Relevant Professional Course": "tqual_pursue",
 }
 
-module.exports = mapVariablesToColumns
+export default variables

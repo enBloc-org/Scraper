@@ -1,14 +1,57 @@
-const fs = require("fs")
-const pdf = require("pdf-parse")
+import { readFileSync } from "fs"
+import pdf from "pdf-parse"
 
-const mapVariablesToColumns = require("./mapVariablesToColumns")
-const variablesArr = Object.keys(mapVariablesToColumns)
+import variables from "./variables.js"
+
+const variablesArr = Object.keys(variables)
 variablesArr.push("Visit of school for / by")
 
-const processGeneralData = async pdfText => {
-  const allValues = pdfText.split("\n")
-  // udise_code and schoolname are not split by \n so need an alternative process
+const parseDocument = async pdfPath => {
+  const dataBuffer = readFileSync(pdfPath)
+  const options = {
+    max: 1,
+  }
+  try {
+    const pdfdata = await pdf(dataBuffer, options)
+    return pdfdata
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+const udiseCode = data => {
+  const regex = /UDISE CODE(.*?)School Name/g
+  const match = regex.exec(data[3])
+  if (match && match[1]) {
+    const udise_code = { udise_code: match[1].trim() } // Trim any leading/trailing spaces
+    return udise_code
+  } else return null
+}
+
+const schoolName = data => {
+  const regex = /School Name(.*?)$/
+  const match = regex.exec(data[3])
+  if (match && match[1]) {
+    const schoolname = { schoolname: match[1].trim() } // Trim any leading/trailing spaces
+    return schoolname
+  } else return null
+}
+
+const processGeneralData = async pdfPath => {
   const schoolDataArr = []
+
+  const parsedpdf = await parseDocument(pdfPath)
+  const pdftext = parsedpdf.text
+
+  const allValues = pdftext.split("\n")
+
+  const udise_code = udiseCode(allValues)
+  schoolDataArr.push(udise_code)
+
+  const schoolname = schoolName(allValues)
+  schoolDataArr.push(schoolname)
+
   allValues.forEach((word, i) => {
     const splitPoint = word.search(/[a-z][A-Z]/)
 
@@ -22,25 +65,13 @@ const processGeneralData = async pdfText => {
       const value = allValues[i + 1]
 
       if (!variablesArr.includes(value)) {
-        const columns = mapVariablesToColumns[splitWord]
+        const columns = variables[splitWord]
         const dataObject = { [columns]: value }
         schoolDataArr.push(dataObject)
       }
     }
   })
-
   return schoolDataArr
 }
 
-const parseLocalPDF = async pdfPath => {
-  const dataBuffer = fs.readFileSync(pdfPath)
-  // temporarily limit parsing to the first page only
-  const options = {
-    max: 1,
-  }
-  const pdfdata = await pdf(dataBuffer, options)
-  const processedData = processGeneralData(pdfdata.text)
-  return processedData
-}
-
-module.exports = parseLocalPDF
+export default processGeneralData
