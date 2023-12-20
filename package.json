@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "jest -o",
     "format": "prettier --write .",
@@ -27,7 +28,8 @@
     "base64topdf": "^1.1.8",
     "better-sqlite3": "^9.1.1",
     "dotenv": "^16.3.1",
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^4.0.269"
   },
   "devDependencies": {
     "eslint": "^8.54.0",
