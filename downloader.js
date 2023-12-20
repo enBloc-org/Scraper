@@ -1,7 +1,7 @@
-require("dotenv").config()
+import "dotenv/config"
 
-const { selectLatest } = require("./model/states.js")
-const { runStates } = require("./utils/downloader/runStates.js")
+import { selectLatest } from "./model/states.js"
+import { runStates } from "./utils/downloader/runStates.js"
 
 const jsonStates = selectLatest()
 const states = JSON.parse(jsonStates.states_file)

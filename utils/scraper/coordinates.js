@@ -181,8 +181,8 @@ const enrolment_and_minority = {
         xmin: 494,
         xmax: 503,
       },
-    }
-  }
+    },
+  },
 }
 
 export default enrolment_and_minority

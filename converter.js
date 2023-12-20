@@ -1,8 +1,9 @@
-const path = require("path")
-const fs = require("fs")
-const { convertBase64 } = require("./utils/converter/convertBase64.js")
-const { errorLogColour, bgLogColour } = require("./utils/colours.js")
+import path from "path"
+import fs from "fs"
+import { convertBase64 } from "./utils/converter/convertBase64.js"
+import { errorLogColour, bgLogColour } from "./utils/colours.js"
 
+const __dirname = new URL(".", import.meta.url).pathname
 const targetFolder = path.resolve(__dirname, "./utils/downloader/downloads/")
 const targetFiles = fs.readdirSync(targetFolder)
 

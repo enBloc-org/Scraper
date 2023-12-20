@@ -1,6 +1,7 @@
-require("dotenv").config()
+import "dotenv/config"
 
-const { errorLogColour, thirdLogColour } = require("../colours.js")
+import { errorLogColour, thirdLogColour } from "../colours.js"
+
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
@@ -83,7 +84,7 @@ const schoolFetch = async (givenStateId, givenBlock) => {
 }
 
 // Iterate through all Blocks in a District
-const getSchools = async givenDistrict => {
+export const getSchools = async givenDistrict => {
   try {
     const newBlocks = []
 
@@ -139,5 +140,3 @@ const getSchools = async givenDistrict => {
     throw error
   }
 }
-
-module.exports = { getSchools }

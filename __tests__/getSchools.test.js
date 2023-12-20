@@ -1,4 +1,5 @@
-const { getSchools } = require("../utils/crawler/getSchools.js")
+import { jest } from "@jest/globals"
+import { getSchools } from "../utils/crawler/getSchools.js"
 
 global.fetch = jest.fn().mockResolvedValue({
   json: jest.fn().mockResolvedValue({

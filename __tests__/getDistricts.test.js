@@ -1,11 +1,8 @@
-require("dotenv").config()
+import { jest } from "@jest/globals"
+import "dotenv/config"
 
-const { getDistricts } = require("../utils/crawler/getDistricts.js")
-const { selectLatest } = require("../model/states.js")
-
-jest.mock("../utils/crawler/getBlocks.js", () => ({
-  getBlocks: jest.fn(currentState => currentState),
-}))
+import { getDistricts } from "../utils/crawler/getDistricts.js"
+import { selectLatest } from "../model/states.js"
 
 global.fetch = jest.fn().mockResolvedValue({
   json: jest.fn().mockResolvedValue([
@@ -49,9 +46,7 @@ describe("getDistricts", () => {
   })
 
   test("it should process states and update the database", async () => {
-    expect(
-      require("../utils/crawler/getBlocks.js").getBlocks,
-    ).toHaveBeenCalledWith({
+    expect("../utils/crawler/getBlocks.js".getBlocks).toHaveBeenCalledWith({
       stateId: 135,
       stateName: "Fake State",
       districts: [

@@ -1,8 +1,9 @@
-require("dotenv").config()
+import "dotenv/config"
+
+import { errorLogColour, secondLogColour } from "../colours.js"
+import { runBlocks } from "./runBlocks.js"
 
 const delayInterval = process.env.DELAY
-const { errorLogColour, secondLogColour } = require("../colours")
-const { runBlocks } = require("./runBlocks")
 
 /**
  *
@@ -10,7 +11,7 @@ const { runBlocks } = require("./runBlocks")
  * @returns no value
  * @remarks this is a recursive function that allows us to process each district in a state in succession
  */
-const runDistricts = async givenState => {
+export const runDistricts = async givenState => {
   try {
     for (let index = 0; index < givenState.districts.length; index++) {
       const currentDistrict = givenState.districts[index]
@@ -41,5 +42,3 @@ const runDistricts = async givenState => {
     throw error
   }
 }
-
-module.exports = { runDistricts }

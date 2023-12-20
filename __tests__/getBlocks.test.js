@@ -1,6 +1,18 @@
-const { getBlocks } = require("../utils/crawler/getBlocks.js")
+import { jest } from "@jest/globals"
+import { getBlocks } from "../utils/crawler/getBlocks.js"
+
+// import { getSchools } from "../utils/crawler/getSchools.js"
+// jest.mock("../utils/crawler/getSchools.js", () => {
+//   const actualGetSchools = jest.requireActual("../utils/crawler/getSchools.js")
+//   return {
+//     __esModule: true,
+//     ...actualGetSchools,
+//     getSchools: jest.fn(currentDistrict => currentDistrict),
+//   }
+// })
 
 jest.mock("../utils/crawler/getSchools.js", () => ({
+  __esModule: true,
   getSchools: jest.fn(currentDistrict => currentDistrict),
 }))
 
@@ -50,9 +62,7 @@ describe("getBlocks", () => {
   })
 
   test("calls getSchools for each Block in a District", () => {
-    expect(
-      require("../utils/crawler/getSchools.js").getSchools,
-    ).toHaveBeenCalledWith({
+    expect("../utils/crawler/getSchools.js".getSchools).toHaveBeenCalledWith({
       districtId: 1,
       districtName: "district 1",
       stateId: 1,
@@ -62,9 +72,7 @@ describe("getBlocks", () => {
       ],
     })
 
-    expect(
-      require("../utils/crawler/getSchools.js").getSchools,
-    ).toHaveBeenCalledWith({
+    expect("../utils/crawler/getSchools.js".getSchools).toHaveBeenCalledWith({
       districtId: 2,
       districtName: "district 2",
       stateId: 1,

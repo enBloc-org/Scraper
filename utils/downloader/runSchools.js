@@ -1,13 +1,12 @@
-require("dotenv").config()
-const fs = require("fs")
-const path = require("path")
+import "dotenv/config"
+import fs from "fs"
+import path from "path"
 
-const delayInterval = process.env.DELAY
-
-const { errorLogColour, fourthLogColour } = require("../colours")
-const { schoolDownload } = require("../downloader/schoolDownload.js")
+import { errorLogColour, fourthLogColour } from "../colours.js"
+import { schoolDownload } from "../downloader/schoolDownload.js"
 
 // create downloads directory if none exists
+const __dirname = new URL(".", import.meta.url).pathname
 const downloadsDir = path.join(__dirname, "downloads")
 if (!fs.existsSync(downloadsDir)) {
   fs.mkdirSync(downloadsDir)
@@ -19,7 +18,7 @@ if (!fs.existsSync(downloadsDir)) {
  * @returns no value
  * @remarks this is a recursive function that allows us to process each school in a block in succession
  */
-const runSchools = async givenBlock => {
+export const runSchools = async givenBlock => {
   try {
     for (let index = 0; index < givenBlock.schoolList.length; index++) {
       const currentSchool = givenBlock.schoolList[index]
@@ -43,29 +42,38 @@ const runSchools = async givenBlock => {
         for (let i = 5; i <= 9; i++) {
           const currentYear = i
 
-          if (
+          const fileName = path.join(
+            __dirname,
+            "downloads",
+            `${currentSchool.districtId}-${currentSchool.blockId}_${
+              yearValue[currentYear]
+            }_${currentSchool.schoolName.replace(/[/?<>\\:*|"\s]/g, "-")}`,
+          )
+
+          if (fs.existsSync(fileName)) {
+            await new Promise(conclude => {
+              const message = console.log("Already Downloaded")
+              conclude(message)
+            })
+          } else if (
             currentSchool[
               `isOperational${yearValue[currentYear].replace("-", "")}`
             ] === 0
-            // currentSchool.isOperational202122 === 0
           ) {
-            await new Promise(resolve => {
-              setTimeout(async () => {
-                const download = await schoolDownload(
-                  currentSchool,
-                  currentYear,
-                )
-                resolve(download)
-              }, delayInterval)
+            await new Promise(async resolve => {
+              const download = await schoolDownload(
+                currentSchool,
+                currentYear,
+                fileName,
+              )
+              resolve(download)
             })
           } else {
             await new Promise(fullfil => {
-              setTimeout(async () => {
-                const log = console.log(
-                  `Not operational in ${yearValue[currentYear]}`,
-                )
-                fullfil(log)
-              }, delayInterval / 4)
+              const log = console.log(
+                `Not operational in ${yearValue[currentYear]}`,
+              )
+              fullfil(log)
             })
           }
         }
@@ -81,5 +89,3 @@ const runSchools = async givenBlock => {
     throw error
   }
 }
-
-module.exports = { runSchools }
