@@ -35,10 +35,10 @@ const processItem = (item, obj) => {
   const results = []
   for (const row in obj) {
     if (row !== "grade" && obj.hasOwnProperty(row)) {
-      const { ymin, ymax } = obj[row];
+      const { ymin, ymax } = obj[row]
       if (item.y >= ymin && item.y <= ymax) {
-        const rowData = processGrade(item, obj.grade, row);
-        results.push(...rowData);
+        const rowData = processGrade(item, obj.grade, row)
+        results.push(...rowData)
       }
     }
   }
@@ -50,9 +50,7 @@ const createObject = textContent => {
     text: item.str,
     x: item.transform[4], // x-coordinate
     y: item.transform[5], // y-coordinate
-  
   }))
-
 
   const results = items.flatMap(item =>
     processItem(item, enrolment_and_minority),
