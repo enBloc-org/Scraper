@@ -5,7 +5,7 @@ const insertSchoolData = async schoolData => {
     .map(obj =>
       Object.entries(obj)
         .filter(([key]) => key !== "undefined")
-        .map(([key]) => key),
+        .map(([key]) => key.replace("-", "_")),
     )
     .flat()
 
@@ -23,7 +23,12 @@ const insertSchoolData = async schoolData => {
       .join(", ")})`,
   )
 
-  insert_school_data.run(data)
+  try {
+    insert_school_data.run(data)
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
 }
 
 export default insertSchoolData
