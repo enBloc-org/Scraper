@@ -63,9 +63,9 @@ const iterateChecker = async () => {
 
               fs.renameSync(currentFileName, newFileName)
             } else {
-              // console.groupCollapsed(newFileName)
-              // schoolDownload(school, currentYear, newFileName)
-              // console.groupEnd()
+              console.groupCollapsed(newFileName)
+              schoolDownload(school, currentYear, newFileName)
+              console.groupEnd()
             }
           }
         }
