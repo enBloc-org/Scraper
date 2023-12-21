@@ -16,6 +16,7 @@
         "no-await-in-loop": 0,
         "no-labels": 0,
         "no-unused-labels": 0,
-        "max-depth": 0
+        "max-depth": 0,
+        "no-loop-func": 0
     }
 }

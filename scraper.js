@@ -5,9 +5,7 @@ import insertSchoolData from "./model/school_data.js"
 const scraper = async pdfPath => {
   const pdfSchoolData = await processGeneralData(pdfPath)
   const tableData = await processTableData(pdfPath)
-
   pdfSchoolData.push(tableData)
-
   insertSchoolData(pdfSchoolData)
 
   console.log(`Scraped`)
