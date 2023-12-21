@@ -1,7 +1,11 @@
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs"
-import enrolment_and_minority from "./coordinates.js"
+import { toilets, rte, ews, enrolment_and_minority } from "./coordinates.js"
 
-const parseDocument = pdf => {
+const parsePage1 = async pdf => {
+  return pdf.getPage(1).then(page => page.getTextContent())
+}
+
+const parsePage2 = async pdf => {
   return pdf.getPage(2).then(page => page.getTextContent())
 }
 
@@ -9,12 +13,18 @@ const processColumn = (item, gradeData, grade, row) => {
   for (const col in gradeData) {
     if (gradeData.hasOwnProperty(col)) {
       const { xmin, xmax } = gradeData[col]
+
       if (item.x >= xmin && item.x <= xmax) {
-        return { key: `${row}_${grade}_${col}`, value: item.text }
+        return {
+          key: `${row}${grade}${col}`,
+          value: `${item.text}`,
+          x: `${item.x}`,
+          y: `${item.y}`,
+        }
       }
     }
   }
-  return null
+  return "*"
 }
 
 const processGrade = (item, grades, row) => {
@@ -45,33 +55,53 @@ const processItem = (item, obj) => {
   return results
 }
 
-const createObject = textContent => {
-  const items = textContent.items.map(item => ({
+const createObject = (page1, page2) => {
+  const items1 = page1.items.map(item => ({
     text: item.str,
     x: item.transform[4], // x-coordinate
     y: item.transform[5], // y-coordinate
   }))
 
-  const results = items.flatMap(item =>
+  const toilet_results = items1.flatMap(item => processItem(item, toilets))
+  const rte_results = items1.flatMap(item => processItem(item, rte))
+  const ews_results = items1.flatMap(item => processItem(item, ews))
+
+  const items2 = page2.items.map(item => ({
+    text: item.str,
+    x: item.transform[4], // x-coordinate
+    y: item.transform[5], // y-coordinate
+  }))
+
+  const en_min_results = items2.flatMap(item =>
     processItem(item, enrolment_and_minority),
   )
 
-  // Now create the final object
-  const tableData = results.reduce((acc, { key, value }) => {
+  const results = [
+    ...toilet_results,
+    ...rte_results,
+    ...ews_results,
+    ...en_min_results,
+  ]
+
+  const allTableData = results.reduce((acc, { key, value }) => {
     acc[key] = value
     return acc
   }, {})
 
-  return tableData
+  return allTableData
 }
 
 const processTableData = async pdf => {
   try {
     const loadingTask = getDocument(pdf)
     const pdfDocument = await loadingTask.promise
-    const parsedDocument = await parseDocument(pdfDocument)
-    const tableData = createObject(parsedDocument)
-    return tableData
+
+    const parsedPage1 = await parsePage1(pdfDocument)
+    const parsedPage2 = await parsePage2(pdfDocument)
+
+    const allTableData = createObject(parsedPage1, parsedPage2)
+
+    return allTableData
   } catch (err) {
     console.error(`Error: ${err}`)
   }
