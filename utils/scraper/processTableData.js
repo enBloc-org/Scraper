@@ -1,6 +1,5 @@
-import fs from 'fs'
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs"
-import { enrolment_and_minority, rte, ews } from "./coordinates.js"
+import { toilets, rte, ews, enrolment_and_minority } from "./coordinates.js"
 
 const parsePage1 = async pdf => {
   return pdf.getPage(1).then(page => page.getTextContent())
@@ -17,7 +16,7 @@ const processColumn = (item, gradeData, grade, row) => {
 
       if (item.x >= xmin && item.x <= xmax) {
         return {
-          key: `${row}_${grade}_${col}`,
+          key: `${row}${grade}${col}`,
           value: `${item.text}`,
           x: `${item.x}`,
           y: `${item.y}`,
@@ -25,7 +24,7 @@ const processColumn = (item, gradeData, grade, row) => {
       }
     }
   }
-  return null
+  return '*'
 }
 
 const processGrade = (item, grades, row) => {
@@ -57,25 +56,16 @@ const processItem = (item, obj) => {
 }
 
 const createObject = (page1, page2) => {
+
   const items1 = page1.items.map(item => ({
     text: item.str,
     x: item.transform[4], // x-coordinate
     y: item.transform[5], // y-coordinate
   }))
 
+  const toilet_results = items1.flatMap(item => processItem(item, toilets))
   const rte_results = items1.flatMap(item => processItem(item, rte))
-  console.log(rte_results)
-
   const ews_results = items1.flatMap(item => processItem(item, ews))
-  console.log(ews_results)
-
-//   let listitems = '';
-// ews_results.forEach(item => {
-//   if (item) {
-//     listitems += `Text: ${item.value}, Key: ${item.key}, X: ${item.x}, Y: ${item.y}\n`; // Append each item to listitems
-//   }
-// });
-// fs.writeFileSync('ews_results.txt', listitems);
 
 
   const items2 = page2.items.map(item => ({
@@ -88,7 +78,7 @@ const createObject = (page1, page2) => {
     processItem(item, enrolment_and_minority),
   )
 
-  const results = [...en_min_results, ...rte_results, ...ews_results]
+  const results = [...toilet_results, ...rte_results, ...ews_results, ...en_min_results,]
 
   const allTableData = results.reduce((acc, { key, value }) => {
     acc[key] = value
@@ -113,7 +103,5 @@ const processTableData = async pdf => {
     console.error(`Error: ${err}`)
   }
 }
-
-processTableData("/Users/eazzopardi/code/agency-scraper/sample report card (1).pdf")
 
 export default processTableData
