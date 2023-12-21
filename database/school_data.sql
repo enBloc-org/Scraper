@@ -297,7 +297,7 @@ CREATE TABLE IF NOT EXISTS school_data (
     bpl_10_b TEXT, bpl_10_g TEXT,
     bpl_11_b TEXT, bpl_11_g TEXT,
     bpl_12_b TEXT, bpl_12_g TEXT,
-    cwsn_pr_b TEXT, cwsn_pre_g TEXT,
+    cwsn_pre_b TEXT, cwsn_pre_g TEXT,
     cwsn_1_b TEXT, cwsn_1_g TEXT,
     cwsn_2_b TEXT, cwsn_2_g TEXT,
     cwsn_3_b TEXT, cwsn_3_g TEXT,
