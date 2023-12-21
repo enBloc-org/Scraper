@@ -5,7 +5,7 @@ const insertSchoolData = async schoolData => {
     .map(obj =>
       Object.entries(obj)
         .filter(([key]) => key !== "undefined")
-        .map(([key]) => key),
+        .map(([key]) => key.replace("-", "_")),
     )
     .flat()
 
@@ -17,13 +17,19 @@ const insertSchoolData = async schoolData => {
     )
     .flat()
 
-  const insert_school_data = db.prepare(
-    /*sql*/ `INSERT INTO school_data (${columns.join(", ")}) VALUES (${data
-      .map(() => "?")
-      .join(", ")})`,
-  )
+  const sql = `INSERT INTO school_data (${columns.join(", ")}) VALUES (${data
+    .map(() => "?")
+    .join(", ")})`
 
-  insert_school_data.run(data)
+  console.log(`SQL GENERATED: ${sql}`)
+  const insert_school_data = db.prepare(sql)
+
+  try {
+    insert_school_data.run(data)
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
 }
 
 export default insertSchoolData

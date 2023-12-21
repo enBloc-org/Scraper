@@ -53,22 +53,26 @@ const processGeneralData = async pdfPath => {
   schoolDataArr.push(schoolname)
 
   allValues.forEach((word, i) => {
-    const splitPoint = word.search(/[a-z][A-Z]/)
+    try {
+      const splitPoint = word.search(/[a-z][A-Z]/)
 
-    let splitWord = word
+      let splitWord = word
 
-    if (splitPoint !== -1) {
-      splitWord = word.substring(splitPoint + 1)
-    }
-
-    if (variablesArr.some(variable => variable.includes(splitWord))) {
-      const value = allValues[i + 1]
-
-      if (!variablesArr.includes(value)) {
-        const columns = variables[splitWord]
-        const dataObject = { [columns]: value }
-        schoolDataArr.push(dataObject)
+      if (splitPoint !== -1) {
+        splitWord = word.substring(splitPoint + 1)
       }
+
+      if (variablesArr.some(variable => variable.includes(splitWord))) {
+        const value = allValues[i + 1]
+
+        if (!variablesArr.includes(value)) {
+          const columns = variables[splitWord]
+          const dataObject = { [columns]: value }
+          schoolDataArr.push(dataObject)
+        }
+      }
+    } catch (error) {
+      console.error
     }
   })
   return schoolDataArr

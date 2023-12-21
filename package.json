@@ -12,7 +12,8 @@
     "lint": "npx eslint .",
     "crawl": "node --max-old-space-size=8192 crawler.js",
     "download": "node --max-old-space-size=8192 downloader.js",
-    "convert": "node --max-old-space-size=8192 converter.js"
+    "convert": "node --max-old-space-size=8192 converter.js",
+    "scrape": "node --max-old-space-size=8192 scraperCallback.js"
   },
   "repository": {
     "type": "git",
