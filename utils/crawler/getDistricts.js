@@ -1,11 +1,12 @@
-require("dotenv").config("")
+import "dotenv/config"
 
-const { firstLogColour, errorLogColour, bgLogColour } = require("../colours.js")
+import { firstLogColour, errorLogColour, bgLogColour } from "../colours.js"
+import { selectLatest, updateStates } from "../../model/states.js"
+import { getBlocks } from "./getBlocks.js"
+
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
-const { selectLatest, updateStates } = require("../../model/states.js")
-const { getBlocks } = require("./getBlocks.js")
 
 const mostRecentStatesJSON = selectLatest()
 const mostRecentStates =
@@ -49,7 +50,7 @@ const districtFetch = async givenState => {
 }
 
 // Iterate through all States
-const getDistricts = async states => {
+export const getDistricts = async states => {
   try {
     const newStates = []
 
@@ -120,5 +121,3 @@ const getDistricts = async states => {
     throw error
   }
 }
-
-module.exports = { getDistricts }

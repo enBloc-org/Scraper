@@ -1,11 +1,11 @@
-require("dotenv").config()
+import "dotenv/config"
 
-const { errorLogColour, secondLogColour } = require("../colours.js")
+import { errorLogColour, secondLogColour } from "../colours.js"
+import { getSchools } from "./getSchools.js"
+
 const baseURL = process.env.BASE_URL
 const requestCookie = process.env.COOKIE
 const delayInterval = process.env.DELAY
-
-const { getSchools } = require("./getSchools.js")
 
 // Fetch Call to the endpoint in each District
 const blockFetch = async givenDistrict => {
@@ -45,7 +45,7 @@ const blockFetch = async givenDistrict => {
 }
 
 // Iterate through all Districts in a State
-const getBlocks = async currentState => {
+export const getBlocks = async currentState => {
   try {
     const newDistricts = []
 
@@ -104,5 +104,3 @@ const getBlocks = async currentState => {
     throw error
   }
 }
-
-module.exports = { getBlocks }

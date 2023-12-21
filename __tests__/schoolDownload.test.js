@@ -1,4 +1,8 @@
-const { schoolDownload } = require("../utils/downloader/schoolDownload.js")
+import fs from "fs"
+import path from "path"
+import { jest } from "@jest/globals"
+
+import { schoolDownload } from "../utils/downloader/schoolDownload.js"
 
 global.fetch = jest.fn().mockResolvedValue({
   body: {
@@ -11,25 +15,13 @@ global.fetch = jest.fn().mockResolvedValue({
   },
 })
 
-jest.mock("fs", () => ({
-  createWriteStream: jest.fn().mockReturnValue({
-    on: jest.fn().mockResolvedValue(() => {}),
-    write: jest.fn().mockResolvedValue(() => {}),
-    end: jest.fn().mockResolvedValue(() => {}),
-  }),
-  readFileSync: jest
-    .fn()
-    .mockReturnValue((string1, string2) => `${string1} ${string2}`),
-  unlinkFileSync: jest.fn().mockResolvedValue(() => {}),
+const mockFS = jest.spyOn(fs, "createWriteStream").mockImplementation(() => ({
+  on: jest.fn().mockResolvedValue(() => {}),
+  write: jest.fn().mockResolvedValue(() => {}),
+  end: jest.fn().mockResolvedValue(() => {}),
 }))
 
-jest.mock("path", () => ({
-  join: jest.fn().mockResolvedValue((...strings) => strings.join("/")),
-}))
-
-jest.mock("../scraper.js", () => ({
-  scraper: jest.fn().mockResolvedValue(() => {}),
-}))
+jest.spyOn(path, "join").mockImplementation((...strings) => strings.join("/"))
 
 describe("schoolDownload", () => {
   beforeEach(() => {
@@ -66,6 +58,6 @@ describe("schoolDownload", () => {
   })
 
   test("creates a writeStream", () => {
-    expect(require("fs").createWriteStream().on).toHaveBeenCalled()
+    expect(mockFS).toHaveBeenCalled()
   })
 })

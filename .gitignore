@@ -4,3 +4,4 @@ test.db
 /node_modules
 /utils/downloader/downloads
 /utils/converter/downloads
+**/.DS_Store

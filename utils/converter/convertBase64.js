@@ -1,32 +1,34 @@
-require("dotenv").config()
-const path = require("path")
-const fs = require("fs")
-const base64 = require("base64topdf")
+import "dotenv/config.js"
+import path from "path"
+import fs from "fs"
+import base64 from "base64topdf"
 
-const delayInterval = process.env.DELAY
-const { firstLogColour } = require("../colours.js")
+import { firstLogColour } from "../colours.js"
 
+const __dirname = new URL(".", import.meta.url).pathname
 const downloadsDir = path.join(__dirname, "downloads")
 if (!fs.existsSync(downloadsDir)) {
   fs.mkdirSync(downloadsDir)
 }
 
-const convertBase64 = async base64StringPath => {
+export const convertBase64 = async base64StringPath => {
   const base64String = fs.readFileSync(base64StringPath, "utf-8")
   const baseTitle = path.basename(base64StringPath)
+
   const pdfFilePath = path.join(__dirname, "downloads", `${baseTitle}.pdf`)
+  if (fs.existsSync(pdfFilePath)) {
+    console.log("Already Converted")
+    console.groupEnd()
+    return
+  }
 
   console.groupCollapsed()
   await new Promise(deliver => {
-    setTimeout(() => {
-      const trigger = base64.base64Decode(base64String, pdfFilePath)
-      deliver(trigger)
-    }, delayInterval / 2)
+    const trigger = base64.base64Decode(base64String, pdfFilePath)
+    deliver(trigger)
   })
   console.log(firstLogColour, `${baseTitle.replace("_", " ")} converted to PDF`)
   // fs.unlinkSync(base64StringPath)
 
   console.groupEnd()
 }
-
-module.exports = { convertBase64 }
