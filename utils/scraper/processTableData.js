@@ -64,6 +64,7 @@ const createObject = (page1, page2) => {
   }))
 
   const rte_results = items1.flatMap(item => processItem(item, rte))
+  console.log(rte_results)
 
   const ews_results = items1.flatMap(item => processItem(item, ews))
   console.log(ews_results)
@@ -87,7 +88,7 @@ const createObject = (page1, page2) => {
     processItem(item, enrolment_and_minority),
   )
 
-  const results = [...en_min_results, ...rte_results]
+  const results = [...en_min_results, ...rte_results, ...ews_results]
 
   const allTableData = results.reduce((acc, { key, value }) => {
     acc[key] = value

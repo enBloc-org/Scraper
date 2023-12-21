@@ -311,156 +311,159 @@ export const ews = {
       "pre": {
         //53.29
         b: {
-          xmin: 45,
+          xmin: 52,
           xmax: 55,
         },
         g: {
           //73.71
-          xmin: 65,
+          xmin: 72,
           xmax: 75,
         },
       },
       1: {
         b: {
           //94.12
-          xmin: 90,
+          xmin: 92,
           xmax: 95,
         },
         g: {
           //114.54
-          xmin: 110,
-          xmax: 120,
+          xmin: 112,
+          xmax: 115,
         },
       },
       2: {
         //134.95
         b: {
-          xmin: 130,
-          xmax: 140,
+          xmin: 132,
+          xmax: 135,
         },
         g: {
           //155.37
-          xmin: 150,
-          xmax: 165,
+          xmin: 153,
+          xmax: 156,
         },
       },
       3: {
         //175.78
         b: {
-          xmin: 170,
-          xmax: 185,
+          xmin: 173,
+          xmax: 177,
         },
         g: {
           //196.2,
-          xmin: 190,
-          xmax: 205,
+          xmin: 194,
+          xmax: 197,
         },
       },
       4: {
         //216.61
         b: {
-          xmin: 210,
-          xmax: 225,
+          xmin: 213,
+          xmax: 217,
         },
         g: {
           //237.03
-          xmin: 230,
-          xmax: 245,
+          xmin: 23,
+          xmax: 238,
         },
       },
       5: {
         b: {
           //257.44
-          xmin: 250,
-          xmax: 265,
+          xmin: 253,
+          xmax: 259,
         },
         g: {
           //277.86
-          xmin: 270,
-          xmax: 285,
+          xmin: 275,
+          xmax: 279,
         },
       },
       6: {
         b: {
           //298.27
-          xmin: 290,
-          xmax: 305,
+          xmin: 297,
+          xmax: 299,
         },
         g: {
           //318.69
-          xmin: 310,
-          xmax: 325,
+          xmin: 316,
+          xmax: 320,
         },
       },
       7: {
         //339.1
         b: {
-          xmin: 330,
-          xmax: 345,
+          xmin: 337,
+          xmax: 340,
         },
         g: {
           //359.5
-          xmin: 350,
-          xmax: 365,
+          xmin: 357,
+          xmax: 360,
         },
       },
       8: {
         //379.93
         b: {
-          xmin: 370,
+          xmin: 377,
           xmax: 380,
         },
+        g: {
+          xmin: 399,
+          xmax: 401,
+        }
+      },
     9: {
       b: {
         //400.35
-        xmin: 395,
-        xmax: 405,
+        xmin: 399,
+        xmax: 401,
       },
       g: {
         //420.76
-        xmin: 418,
-        xmax: 425,
+        xmin: 419,
+        xmax: 421,
       },
     },
     10: {
       //441.18
       b: {
         xmin: 440,
-        xmax: 445,
+        xmax: 442,
       },
       g: {
         //461.59
         xmin: 460,
-        xmax: 465,
+        xmax: 463,
       },
     },
     11: {
       b: {
         // 482.01
-        xmin: 480,
-        xmax: 485,
+        xmin: 481,
+        xmax: 483,
       },
       g: {
         // 502.42
-        xmin: 500,
-        xmax: 505,
+        xmin: 501,
+        xmax: 503,
       },
     },
     12: {
       //522.84,
       b: {
-        xmin: 520,
-        xmax: 525,
+        xmin: 521,
+        xmax: 523,
       },
       g: {
         //543.25
-        xmin: 540,
+        xmin: 542,
         xmax: 545,
       },
     },
-
   },
-},
 }
 
 
