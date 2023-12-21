@@ -24,7 +24,7 @@ const processColumn = (item, gradeData, grade, row) => {
       }
     }
   }
-  return '*'
+  return "*"
 }
 
 const processGrade = (item, grades, row) => {
@@ -56,7 +56,6 @@ const processItem = (item, obj) => {
 }
 
 const createObject = (page1, page2) => {
-
   const items1 = page1.items.map(item => ({
     text: item.str,
     x: item.transform[4], // x-coordinate
@@ -66,7 +65,6 @@ const createObject = (page1, page2) => {
   const toilet_results = items1.flatMap(item => processItem(item, toilets))
   const rte_results = items1.flatMap(item => processItem(item, rte))
   const ews_results = items1.flatMap(item => processItem(item, ews))
-
 
   const items2 = page2.items.map(item => ({
     text: item.str,
@@ -78,7 +76,12 @@ const createObject = (page1, page2) => {
     processItem(item, enrolment_and_minority),
   )
 
-  const results = [...toilet_results, ...rte_results, ...ews_results, ...en_min_results,]
+  const results = [
+    ...toilet_results,
+    ...rte_results,
+    ...ews_results,
+    ...en_min_results,
+  ]
 
   const allTableData = results.reduce((acc, { key, value }) => {
     acc[key] = value

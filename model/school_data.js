@@ -17,12 +17,11 @@ const insertSchoolData = async schoolData => {
     )
     .flat()
 
-  const sql = `INSERT INTO school_data (${columns.join(", ")}) VALUES (${data
-    .map(() => "?")
-    .join(", ")})`
-
-  console.log(`SQL GENERATED: ${sql}`)
-  const insert_school_data = db.prepare(sql)
+  const insert_school_data = db.prepare(
+    /*sql*/ `INSERT INTO school_data (${columns.join(", ")}) VALUES (${data
+      .map(() => "?")
+      .join(", ")})`,
+  )
 
   try {
     insert_school_data.run(data)
