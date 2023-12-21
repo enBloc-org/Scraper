@@ -1,6 +1,5 @@
 import { readFileSync } from "fs"
 import pdf from "pdf-parse"
-
 import variables from "./variables.js"
 
 const variablesArr = Object.keys(variables)
@@ -26,7 +25,7 @@ const udiseCode = data => {
   if (match && match[1]) {
     const udise_code = { udise_code: match[1].trim() } // Trim any leading/trailing spaces
     return udise_code
-  } else return null
+  } else return '*'
 }
 
 const schoolName = data => {
@@ -35,12 +34,11 @@ const schoolName = data => {
   if (match && match[1]) {
     const schoolname = { schoolname: match[1].trim() } // Trim any leading/trailing spaces
     return schoolname
-  } else return null
+  } else return '*'
 }
 
 const processGeneralData = async pdfPath => {
   const schoolDataArr = []
-
   const parsedpdf = await parseDocument(pdfPath)
   const pdftext = parsedpdf.text
 
@@ -53,25 +51,32 @@ const processGeneralData = async pdfPath => {
   schoolDataArr.push(schoolname)
 
   allValues.forEach((word, i) => {
+    const value = allValues[i + 1]
+    
+    if (word == 'DigiBoard'){
+      if (variablesArr.some(variable => variable.includes(word))) {
+        const columns = variables[word ];
+        const dataObject = { [columns]: value };
+        schoolDataArr.push(dataObject);
+    }
+  }
+    
+  else {
     const splitPoint = word.search(/[a-z][A-Z]/)
-
     let splitWord = word
-
     if (splitPoint !== -1) {
       splitWord = word.substring(splitPoint + 1)
     }
-
     if (variablesArr.some(variable => variable.includes(splitWord))) {
-      const value = allValues[i + 1]
-
       if (!variablesArr.includes(value)) {
         const columns = variables[splitWord]
         const dataObject = { [columns]: value }
         schoolDataArr.push(dataObject)
+        }
       }
-    }
-  })
-  return schoolDataArr
+  }
+})
+return schoolDataArr
 }
 
 export default processGeneralData
