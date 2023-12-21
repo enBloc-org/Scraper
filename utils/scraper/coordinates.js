@@ -310,158 +310,159 @@ export const ews = {
   },
   grade: {
     pre: {
-      //53.29
+      //integer //53.29
       b: {
-        xmin: 52,
-        xmax: 55,
+        xmin: 50,
+        xmax: 54,
       },
       g: {
-        //73.71
-        xmin: 72,
-        xmax: 75,
+        //integer //73.71
+        xmin: 69,
+        xmax: 74,
       },
     },
     1: {
       b: {
-        //94.12
-        xmin: 92,
+        //integer //94.12
+        xmin: 91,
         xmax: 95,
       },
       g: {
-        //114.54
-        xmin: 112,
+        //integer //114.54
+        xmin: 111,
         xmax: 115,
       },
     },
     2: {
-      //134.95
+      //integer //134.95
       b: {
-        xmin: 132,
+        xmin: 131,
         xmax: 135,
       },
       g: {
-        //155.37
-        xmin: 153,
+       //integer //155.37
+        xmin: 152,
         xmax: 156,
       },
     },
     3: {
-      //175.78
+      //integer //175.78
       b: {
-        xmin: 173,
-        xmax: 177,
+        xmin: 172,
+        xmax: 176,
       },
       g: {
-        //196.2,
-        xmin: 194,
+       //integer  //196.2,
+        xmin: 193,
         xmax: 197,
       },
     },
     4: {
-      //216.61
+      //integer //216.61
       b: {
         xmin: 213,
         xmax: 217,
       },
       g: {
-        //237.03
-        xmin: 23,
+        //integer //237.03
+        xmin: 234,
         xmax: 238,
       },
     },
     5: {
       b: {
-        //257.44
-        xmin: 253,
-        xmax: 259,
+       //integer //257.44
+        xmin: 254,
+        xmax: 258,
       },
       g: {
-        //277.86
-        xmin: 275,
-        xmax: 279,
+        //integer //277.86
+        xmin: 274,
+        xmax: 278,
       },
     },
     6: {
       b: {
-        //298.27
-        xmin: 297,
+        //integer //298.27
+        xmin: 295,
         xmax: 299,
       },
       g: {
-        //318.69
-        xmin: 316,
-        xmax: 320,
+        //integer //318.69
+        xmin: 315,
+        xmax: 319,
       },
     },
     7: {
-      //339.1
+      //integer //339.1
       b: {
-        xmin: 337,
+        xmin: 336,
         xmax: 340,
       },
       g: {
-        //359.5
-        xmin: 357,
+       //integer  //359.52,
+        xmin: 356,
         xmax: 360,
       },
     },
     8: {
-      //379.93
+      //integer //379.93
       b: {
-        xmin: 377,
+        xmin: 376,
         xmax: 380,
       },
       g: {
-        xmin: 399,
+        //integer // 400.35
+        xmin: 397,
         xmax: 401,
       },
     },
     9: {
       b: {
-        //400.35
-        xmin: 399,
-        xmax: 401,
+        //integer //420.76
+        xmin: 417,
+        xmax: 421,
       },
       g: {
-        //420.76
-        xmin: 419,
-        xmax: 421,
+        //integer //441.18
+        xmin: 438,
+        xmax: 442,
       },
     },
     10: {
-      //441.18
+      //integer //461.59
       b: {
-        xmin: 440,
-        xmax: 442,
+        xmin: 458,
+        xmax: 462,
       },
       g: {
-        //461.59
-        xmin: 460,
-        xmax: 463,
+        //integer //482.01
+        xmin: 479,
+        xmax: 483,
       },
     },
     11: {
       b: {
-        // 482.01
-        xmin: 481,
-        xmax: 483,
+        //integer // 502.42
+        xmin: 499,
+        xmax: 503,
       },
       g: {
-        // 502.42
-        xmin: 501,
-        xmax: 503,
+        //integer // 522.84
+        xmin: 519,
+        xmax: 523,
       },
     },
     12: {
-      //522.84,
+      //integer //543.25,
       b: {
-        xmin: 521,
-        xmax: 523,
+        xmin: 540,
+        xmax: 544,
       },
       g: {
-        //543.25
-        xmin: 542,
-        xmax: 545,
+       //integer //563.67
+        xmin: 560,
+        xmax: 564,
       },
     },
   },
