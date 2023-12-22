@@ -7,14 +7,14 @@ variablesArr.push("Visit of school for / by")
 
 const fuzzyMatch = (input, array) => {
   const regexString = input
-    .split('')
+    .split("")
     .map(char => `[${char}]`)
-    .join('.*?');
+    .join(".*?")
 
-  const regex = new RegExp(regexString, 'i'); // 'i' flag for case-insensitive match
+  const regex = new RegExp(regexString, "i") // 'i' flag for case-insensitive match
 
-  return array.filter(item => regex.test(item));
-};
+  return array.filter(item => regex.test(item))
+}
 
 const parseDocument = async pdfPath => {
   const dataBuffer = readFileSync(pdfPath)
@@ -59,46 +59,44 @@ const processGeneralData = async pdfPath => {
     const word = all[i]
     const value = all[i + 1]
 
-    // DIGIBOARD 
-    if ( word === "DigiBoard" && variablesArr.some(variable => variable.includes(word))) {
+    // DIGIBOARD
+    if (
+      word === "DigiBoard" &&
+      variablesArr.some(variable => variable.includes(word))
+    ) {
       const columns = variables[word]
       const dataObject = { [columns]: value }
       schoolDataArr.push(dataObject)
-      
-    } 
-    else {
-      // ALL OTHER VALUES 
+    } else {
+      // ALL OTHER VALUES
       const splitPoint = word.search(/[a-z][A-Z]/)
       // console.log("word: ", word)
       let splitWord = word
-      const matchingVariables = fuzzyMatch(splitWord, variablesArr);
+      const matchingVariables = fuzzyMatch(splitWord, variablesArr)
 
       if (splitPoint !== -1) {
         splitWord = word.substring(splitPoint + 1)
         // console.log("splitWord: ", splitWord)
       }
-      
+
       if (
         variablesArr.some(variable => variable.includes(splitWord)) &&
-        !variablesArr.includes(value) 
+        !variablesArr.includes(value)
       ) {
-        
         const columns = variables[splitWord]
         const dataObject = { [columns]: value }
         schoolDataArr.push(dataObject)
-
       }
       // TYPOS
-      
       else if (matchingVariables.length > 0 && !variablesArr.includes(value)) {
-        const columns = variables[matchingVariables];
+        const columns = variables[matchingVariables]
         if (!schoolDataArr.some(data => data.hasOwnProperty(columns))) {
-          console.log(columns);
-          const dataObject = { [columns]: value };
+          console.log(columns)
+          const dataObject = { [columns]: value }
           console.log(dataObject)
           //   schoolDataArr.push(dataObject);
         }
-      } 
+      }
     }
   }
 
