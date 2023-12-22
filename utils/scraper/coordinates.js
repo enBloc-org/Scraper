@@ -160,13 +160,13 @@ export const ews = {
   },
   grade: {
     _pre: {
-      //integer //53.29
+      //51.73 //53.29
       _b: {
         xmin: 50,
         xmax: 54,
       },
       _g: {
-        //integer //73.71
+        //72.15 //73.71
         xmin: 69,
         xmax: 74,
       },
