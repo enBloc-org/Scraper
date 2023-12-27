@@ -33,9 +33,9 @@ const processGeneralData = async pdfPath => {
   const schoolDataArr = []
   const parsedpdf = await parseDocument(pdfPath)
   const pdftext = parsedpdf.text
-
   const all = pdftext.split("\n")
 
+  // UDISE CODE and SCHOOL NAME
   const udiseRegex = /UDISE CODE(.*?)School Name/g
   const schoolRegex = /School Name(.*?)$/
 
@@ -43,8 +43,6 @@ const processGeneralData = async pdfPath => {
   const schoolname = { schoolname: extractValue(all, schoolRegex) }
 
   schoolDataArr.push(udise_code, schoolname)
-
-  // console.log(all)
 
   for (let i = 0; i < all.length; i++) {
     const word = all[i]
@@ -59,12 +57,11 @@ const processGeneralData = async pdfPath => {
       const dataObject = { [columns]: value }
       schoolDataArr.push(dataObject)
     } else {
-      
+  
       // ALL OTHER VALUES
       const splitPoint = word.search(/[a-z][A-Z]/)
       let splitWord = word.replace(/[^a-zA-Z0-9\s-/?.()]/g, "")
-      console.log("split words: ", splitWord)
-      
+  
       if (splitPoint !== -1) {
         splitWord = word.substring(splitPoint + 1)
       }
@@ -75,10 +72,9 @@ const processGeneralData = async pdfPath => {
       ) {
         const columns = variables[splitWord]
         const dataObject = { [columns]: value }
-        schoolDataArr.push(dataObject)   
+        schoolDataArr.push(dataObject)
       }
-      }
-
+    }
   }
 
   return schoolDataArr
