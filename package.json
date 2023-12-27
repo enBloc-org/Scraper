@@ -12,6 +12,7 @@
     "lint": "npx eslint .",
     "crawl": "node --max-old-space-size=8192 crawler.js",
     "download": "node --max-old-space-size=8192 downloader.js",
+    "check": "node --max-old-space-size=8192 checkDownloads.js",
     "convert": "node --max-old-space-size=8192 converter.js",
     "scrape": "node --max-old-space-size=8192 scraperCallback.js"
   },
