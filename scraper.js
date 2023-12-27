@@ -1,13 +1,20 @@
 import processGeneralData from "./utils/scraper/processGeneralData.js"
 import processTableData from "./utils/scraper/processTableData.js"
 import insertSchoolData from "./model/school_data.js"
+import path from "path"
 
 const scraper = async pdfPath => {
   const pdfSchoolData = await processGeneralData(pdfPath)
   const tableData = await processTableData(pdfPath)
   pdfSchoolData.push(tableData)
-  insertSchoolData(pdfSchoolData)
 
+  const yearRegex = /(2018-19)|(2019-20)|(2020-21)|(2021-22)|(2022-23)/
+  const fileBaseTitle = path.basename(pdfPath)
+
+  const year = fileBaseTitle.match(yearRegex)[0]
+  pdfSchoolData.push({ year })
+
+  insertSchoolData(pdfSchoolData)
   console.log(`Scraped`)
 }
 
