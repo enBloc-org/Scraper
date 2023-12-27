@@ -69,8 +69,6 @@ const processGeneralData = async pdfPath => {
         splitWord = word.substring(splitPoint + 1)
       }
 
-      
-
       if (
         variablesArr.some(variable => variable.includes(splitWord)) &&
         !variablesArr.includes(value)
