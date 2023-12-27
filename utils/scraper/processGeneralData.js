@@ -5,31 +5,6 @@ import variables from "./variables.js"
 const variablesArr = Object.keys(variables)
 variablesArr.push("Visit of school for / by")
 
-const fuzzyMatch = (matchObj, array) => {
-
-  // create regex string from matchObj.input
-  const regexString = matchObj.input
-    .split("")
-    .map(char => `[${char}]`)
-    .join(".*?")
-
-  // look through each character of the regex string, allowing for extra characters
-  const regex = new RegExp(regexString, "i") // 'i' flag for case-insensitive match
-  
-  // filter through variablesArr to see if item matches regex created from the matchObj input
-  const filteredVariables = array.filter(item => regex.test(item))
-  const filterArr = []
-
-  // add each match to filterArr
-  filteredVariables.forEach(filteredItem => {
-    filterArr.push(filteredItem);
-  });
-  
-  console.log(filterArr)
-  
-  return filteredVariables
-}
-
 const parseDocument = async pdfPath => {
   const dataBuffer = readFileSync(pdfPath)
   const options = {
@@ -69,6 +44,8 @@ const processGeneralData = async pdfPath => {
 
   schoolDataArr.push(udise_code, schoolname)
 
+  // console.log(all)
+
   for (let i = 0; i < all.length; i++) {
     const word = all[i]
     const value = all[i + 1]
@@ -85,11 +62,14 @@ const processGeneralData = async pdfPath => {
       
       // ALL OTHER VALUES
       const splitPoint = word.search(/[a-z][A-Z]/)
-      let splitWord = word
+      let splitWord = word.replace(/[^a-zA-Z0-9\s-/?.()]/g, "")
+      console.log("split words: ", splitWord)
       
       if (splitPoint !== -1) {
         splitWord = word.substring(splitPoint + 1)
       }
+
+      
 
       if (
         variablesArr.some(variable => variable.includes(splitWord)) &&
@@ -97,16 +77,8 @@ const processGeneralData = async pdfPath => {
       ) {
         const columns = variables[splitWord]
         const dataObject = { [columns]: value }
-        schoolDataArr.push(dataObject)
+        schoolDataArr.push(dataObject)   
       }
-      // TYPOS
-
-      const matchObj = {input: splitWord, value}
-      const matchingVariables = fuzzyMatch(matchObj, variablesArr)
-
-      // check if key value pairs are already in schoolDataArr
-      // add in any previously missed values
-
       }
 
   }
