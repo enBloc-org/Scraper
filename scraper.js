@@ -1,7 +1,8 @@
+import path from "path"
+
 import processGeneralData from "./utils/scraper/processGeneralData.js"
 import processTableData from "./utils/scraper/processTableData.js"
 import insertSchoolData from "./model/school_data.js"
-import path from "path"
 
 const scraper = async pdfPath => {
   const pdfSchoolData = await processGeneralData(pdfPath)
