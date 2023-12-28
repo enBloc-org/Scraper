@@ -44,6 +44,7 @@ const processGeneralData = async pdfPath => {
 
   const all = pdftext.split("\n")
 
+  // UDISE CODE and SCHOOL NAME
   const udiseRegex = /UDISE CODE(.*?)School Name/g
   const schoolRegex = /School Name(.*?)$/
 
@@ -57,6 +58,7 @@ const processGeneralData = async pdfPath => {
     const word = all[i]
     const value = all[i + 1]
 
+    // DIGIBOARD
     if (
       word === "DigiBoard" &&
       variablesArr.some(variable => variable.includes(word))
@@ -65,9 +67,11 @@ const processGeneralData = async pdfPath => {
       const dataObject = { [columns]: value }
       schoolDataArr.push(dataObject)
     } else {
+  
+      // ALL OTHER VALUES
       const splitPoint = word.search(/[a-z][A-Z]/)
-      let splitWord = word
-
+      let splitWord = word.replace(/[^a-zA-Z0-9\s-/?.()]/g, "")
+  
       if (splitPoint !== -1) {
         splitWord = word.substring(splitPoint + 1)
       }
