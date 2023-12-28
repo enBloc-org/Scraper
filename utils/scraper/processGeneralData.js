@@ -1,4 +1,5 @@
 import { readFileSync } from "fs"
+import path from "path"
 import pdf from "pdf-parse"
 import variables from "./variables.js"
 
@@ -29,10 +30,18 @@ const extractValue = (data, regexPattern) => {
   }
 }
 
+const getYearValue = filePath => {
+  const yearRegex = /(2018-19)|(2019-20)|(2020-21)|(2021-22)|(2022-23)/
+  const fileBaseTitle = path.basename(filePath)
+
+  return fileBaseTitle.match(yearRegex)[0]
+}
+
 const processGeneralData = async pdfPath => {
   const schoolDataArr = []
   const parsedpdf = await parseDocument(pdfPath)
   const pdftext = parsedpdf.text
+
   const all = pdftext.split("\n")
 
   // UDISE CODE and SCHOOL NAME
@@ -41,8 +50,9 @@ const processGeneralData = async pdfPath => {
 
   const udise_code = { udise_code: extractValue(all, udiseRegex) }
   const schoolname = { schoolname: extractValue(all, schoolRegex) }
+  const year = { year: getYearValue(pdfPath) }
 
-  schoolDataArr.push(udise_code, schoolname)
+  schoolDataArr.push(udise_code, schoolname, year)
 
   for (let i = 0; i < all.length; i++) {
     const word = all[i]
@@ -57,11 +67,10 @@ const processGeneralData = async pdfPath => {
       const dataObject = { [columns]: value }
       schoolDataArr.push(dataObject)
     } else {
-  
       // ALL OTHER VALUES
       const splitPoint = word.search(/[a-z][A-Z]/)
       let splitWord = word.replace(/[^a-zA-Z0-9\s-/?.()]/g, "")
-  
+
       if (splitPoint !== -1) {
         splitWord = word.substring(splitPoint + 1)
       }

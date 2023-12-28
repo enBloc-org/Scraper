@@ -6,6 +6,7 @@ const scraper = async pdfPath => {
   const pdfSchoolData = await processGeneralData(pdfPath)
   const tableData = await processTableData(pdfPath)
   pdfSchoolData.push(tableData)
+
   insertSchoolData(pdfSchoolData)
 
   console.log(`Scraped`)
