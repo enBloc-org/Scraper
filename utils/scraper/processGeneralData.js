@@ -33,7 +33,7 @@ const extractValue = (data, regexPattern) => {
 const getYearValue = filePath => {
   const yearRegex = /(2018-19)|(2019-20)|(2020-21)|(2021-22)|(2022-23)/
   const fileBaseTitle = path.basename(filePath)
-  
+
   return fileBaseTitle.match(yearRegex)[0]
 }
 
@@ -67,11 +67,10 @@ const processGeneralData = async pdfPath => {
       const dataObject = { [columns]: value }
       schoolDataArr.push(dataObject)
     } else {
-  
       // ALL OTHER VALUES
       const splitPoint = word.search(/[a-z][A-Z]/)
       let splitWord = word.replace(/[^a-zA-Z0-9\s-/?.()]/g, "")
-  
+
       if (splitPoint !== -1) {
         splitWord = word.substring(splitPoint + 1)
       }
