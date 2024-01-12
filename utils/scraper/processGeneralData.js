@@ -22,17 +22,18 @@ const parseDocument = async pdfPath => {
 
 const extractValue = (data, regexPattern) => {
   const regex = new RegExp(regexPattern) // create a new regular expression object using the pattern provided 
-  const match = regex.exec(data[3]) // regex.exec executes the regular expression regex on the fourth element of the data array (see console)
-  if (match && match[1]) { // match = 'UDISE CODE35  01  03  00  303School NameGREEN ISLAND SCHOOL'  = "GREEN ISLAND SCHOOL"
-    return match[1].trim() // Trim any leading/trailing spaces
+  const match = regex.exec(data[3]) // regex.exec executes the regular expression regex on the fourth element of the data array
+  if (match && match[1]) { 
+    return match[1].trim() 
   } else {
     return "*"
   }
 }
 
 const getNameValue = filePath => {
-  const fileBaseTitle = path.basename(filePath).replace(/[.pdf]/g, '').replace(/(2018-19)|(2019-20)|(2020-21)|(2021-22)|(2022-23)_/g,"")
-  return fileBaseTitle
+  const fileBaseTitle = path.basename(filePath).replace(/[.pdf]/g, '').replace(/(2018-19)|(2019-20)|(2020-21)|(2021-22)|(2022-23)_/g,"").match(/_+(.+)/)
+  const schoolName = fileBaseTitle[1].replace(/-/g, " ")
+  return schoolName.trim()
 }
 
 const getYearValue = filePath => {
