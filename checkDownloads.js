@@ -63,7 +63,7 @@ const iterateChecker = async () => {
 
                 // retry downloading if the file is corrupted
                 if (!isValidContent) {
-                  console.groupCollapsed("Retrying")
+                  console.groupCollapsed(`Retrying ${school.schoolName}`)
 
                   await new Promise(async resolve => {
                     fs.unlinkSync(oldFileName)
@@ -92,7 +92,7 @@ const iterateChecker = async () => {
 
                 // retry downloading if the file is corrupted
                 if (!isValidContent) {
-                  console.groupCollapsed("Retrying")
+                  console.groupCollapsed(`Retrying ${school.schoolName}`)
 
                   await new Promise(async resolve => {
                     fs.unlinkSync(newFileName)
