@@ -26,7 +26,6 @@ const iterateChecker = async () => {
   }
 
   let filesChecked = 0
-  let filesExcluded = 0
 
   for (const state of states) {
     for (const district of state.districts) {
@@ -35,13 +34,13 @@ const iterateChecker = async () => {
           for (let i = 5; i <= 9; i++) {
             const currentYear = i
 
-            // ignore endpoints where no file is expected for download
+            // only action endpoints where a download is expected to be available
             if (
               school[
                 `isOperational${yearValue[currentYear].replace("-", "")}`
               ] === 0
             ) {
-              const currentFileName = path.join(
+              const oldFileName = path.join(
                 downloadsDir,
                 `${school.districtId}-${school.blockId}_${
                   yearValue[currentYear]
@@ -55,19 +54,52 @@ const iterateChecker = async () => {
                 }_${school.schoolName.replace(/[/?<>\\:*|"\s]/g, "-")}`,
               )
 
-              if (fs.existsSync(currentFileName)) {
-                const content = fs.readFileSync(currentFileName)
+              if (fs.existsSync(oldFileName)) {
+                const content = fs
+                  .readFileSync(oldFileName, "utf-8")
+                  .substring(0, 9)
+
+                const isValidContent = content === "JVBERi0xL"
 
                 // retry downloading if the file is corrupted
-                if (content.length === 0) {
-                  console.groupCollapsed("Retrying")
+                if (!isValidContent) {
+                  console.groupCollapsed(`Retrying ${school.schoolName}`)
 
                   await new Promise(async resolve => {
-                    fs.unlinkSync(currentFileName)
+                    fs.unlinkSync(oldFileName)
                     const trigger = await schoolDownload(
                       school,
                       currentYear,
-                      currentFileName,
+                      oldFileName,
+                    )
+                    resolve(trigger)
+                  })
+
+                  console.groupEnd()
+                }
+
+                // rename the file after checking
+                fs.renameSync(oldFileName, newFileName)
+
+                filesChecked++
+              } else if (fs.existsSync(newFileName)) {
+                // check file under new name if it exists
+                const content = fs
+                  .readFileSync(newFileName, "utf-8")
+                  .substring(0, 9)
+
+                const isValidContent = content === "JVBERi0xL"
+
+                // retry downloading if the file is corrupted
+                if (!isValidContent) {
+                  console.groupCollapsed(`Retrying ${school.schoolName}`)
+
+                  await new Promise(async resolve => {
+                    fs.unlinkSync(newFileName)
+                    const trigger = await schoolDownload(
+                      school,
+                      currentYear,
+                      newFileName,
                     )
                     resolve(trigger)
                   })
@@ -76,17 +108,7 @@ const iterateChecker = async () => {
                 }
 
                 filesChecked++
-                // rename the file after checking
-                fs.renameSync(currentFileName, newFileName)
-              } else {
-                filesChecked++
-                // retry downloading if file is missing
-                console.groupCollapsed(newFileName)
-                schoolDownload(school, currentYear, newFileName)
-                console.groupEnd()
               }
-            } else {
-              filesExcluded++
             }
           }
         }
@@ -94,11 +116,7 @@ const iterateChecker = async () => {
     }
   }
 
-  console.log(
-    `${filesChecked} files checked + ${filesExcluded} endpoints without an available file = ${
-      filesChecked + filesExcluded
-    } entries processed`,
-  )
+  console.log(`${filesChecked} files checked`)
 }
 
 iterateChecker()
