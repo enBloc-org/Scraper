@@ -62,7 +62,7 @@ const iterateChecker = async () => {
                 const isValidContent = content === "JVBERi0xL"
 
                 // retry downloading if the file is corrupted
-                if (!isValidContent) {
+                if (!isValidContent && content !== "1") {
                   console.groupCollapsed(`Retrying ${school.schoolName}`)
 
                   await new Promise(async resolve => {
@@ -76,6 +76,9 @@ const iterateChecker = async () => {
                   })
 
                   console.groupEnd()
+                } else if (content === "1") {
+                  // delete files corrupted at the source
+                  fs.unlinkSync(oldFileName)
                 }
 
                 // rename the file after checking
@@ -91,7 +94,7 @@ const iterateChecker = async () => {
                 const isValidContent = content === "JVBERi0xL"
 
                 // retry downloading if the file is corrupted
-                if (!isValidContent) {
+                if (!isValidContent && content !== "1") {
                   console.groupCollapsed(`Retrying ${school.schoolName}`)
 
                   await new Promise(async resolve => {
@@ -105,6 +108,9 @@ const iterateChecker = async () => {
                   })
 
                   console.groupEnd()
+                } else if (content === "1") {
+                  // delete files corrupted at the source
+                  fs.unlinkSync(newFileName)
                 }
 
                 filesChecked++
