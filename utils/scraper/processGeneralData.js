@@ -73,12 +73,10 @@ const processGeneralData = async pdfPath => {
     const value = all[i + 1]
 
     // DIGIBOARD
-    if (
-      word === "DigiBoard" &&
-      variablesArr.some(variable => variable.includes(word))
-    ) {
+    if (word === "DigiBoard" && variablesArr.some(variable => variable.includes(word))) {
       updateSchoolDataArr(word, value, schoolDataArr)
-    } else {
+      return
+    } 
       // ALL OTHER VALUES
       const splitPoint = word.search(/[a-z][A-Z]/)
       let splitWord = word.replace(/[^a-zA-Z0-9\s-/?.()]/g, "")
@@ -87,13 +85,10 @@ const processGeneralData = async pdfPath => {
         splitWord = word.substring(splitPoint + 1)
       }
 
-      if (
-        variablesArr.some(variable => variable.includes(splitWord)) &&
-        !variablesArr.includes(value)
-      ) {
+      if (variablesArr.some(variable => variable.includes(splitWord)) && !variablesArr.includes(value)) {
         updateSchoolDataArr(splitWord, value, schoolDataArr)
       }
-    }
+    
   }
 
   return schoolDataArr
