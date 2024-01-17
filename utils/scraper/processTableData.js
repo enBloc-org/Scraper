@@ -1,12 +1,8 @@
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs"
 import { toilets, rte, ews, enrolment_and_minority } from "./coordinates.js"
 
-const parsePage1 = async pdf => {
-  return pdf.getPage(1).then(page => page.getTextContent())
-}
-
-const parsePage2 = async pdf => {
-  return pdf.getPage(2).then(page => page.getTextContent())
+const parsePage = async (pdf, pageNumber) => {
+  return pdf.getPage(pageNumber).then(page => page.getTextContent())
 }
 
 const processColumn = (item, gradeData, grade, row) => {
@@ -96,10 +92,12 @@ const processTableData = async pdf => {
     const loadingTask = getDocument(pdf)
     const pdfDocument = await loadingTask.promise
 
-    const parsedPage1 = await parsePage1(pdfDocument)
-    const parsedPage2 = await parsePage2(pdfDocument)
+    const parsedPage1 = await parsePage(pdfDocument, 1)
+    const parsedPage2 = await parsePage(pdfDocument, 2)
 
     const allTableData = createObject(parsedPage1, parsedPage2)
+
+    console.log(allTableData)
 
     return allTableData
   } catch (err) {
