@@ -25,9 +25,8 @@ const extractValue = (data, regexPattern) => {
   const match = regex.exec(data[3]) // regex.exec executes the regular expression regex on the fourth element of the data array
   if (match && match[1]) {
     return match[1].trim()
-  } else {
+  } 
     return "*"
-  }
 }
 
 const getNameValue = filePath => {
@@ -69,7 +68,6 @@ const processGeneralData = async pdfPath => {
 
   schoolDataArr.push(udise_code, schoolname, year)
 
-
   for (let i = 0; i < all.length; i++) {
     const word = all[i]
     const value = all[i + 1]
@@ -79,7 +77,7 @@ const processGeneralData = async pdfPath => {
       word === "DigiBoard" &&
       variablesArr.some(variable => variable.includes(word))
     ) {
-      updateSchoolDataArr(word, value, schoolDataArr )
+      updateSchoolDataArr(word, value, schoolDataArr)
     } else {
       // ALL OTHER VALUES
       const splitPoint = word.search(/[a-z][A-Z]/)
@@ -100,7 +98,5 @@ const processGeneralData = async pdfPath => {
 
   return schoolDataArr
 }
-
-
 
 export default processGeneralData
