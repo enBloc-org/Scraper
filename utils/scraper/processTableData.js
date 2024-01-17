@@ -97,8 +97,6 @@ const processTableData = async pdf => {
 
     const allTableData = createObject(parsedPage1, parsedPage2)
 
-    console.log(allTableData)
-
     return allTableData
   } catch (err) {
     console.error(`Error: ${err}`)
