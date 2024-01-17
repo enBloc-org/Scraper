@@ -47,6 +47,12 @@ const getYearValue = filePath => {
   return fileBaseTitle.match(yearRegex)[0]
 }
 
+const updateSchoolDataArr = (word, value, array) => {
+  const columns = variables[word]
+  const dataObject = { [columns]: value }
+  array.push(dataObject)
+}
+
 const processGeneralData = async pdfPath => {
   const schoolDataArr = []
   const parsedpdf = await parseDocument(pdfPath)
@@ -63,6 +69,7 @@ const processGeneralData = async pdfPath => {
 
   schoolDataArr.push(udise_code, schoolname, year)
 
+
   for (let i = 0; i < all.length; i++) {
     const word = all[i]
     const value = all[i + 1]
@@ -72,9 +79,7 @@ const processGeneralData = async pdfPath => {
       word === "DigiBoard" &&
       variablesArr.some(variable => variable.includes(word))
     ) {
-      const columns = variables[word]
-      const dataObject = { [columns]: value }
-      schoolDataArr.push(dataObject)
+      updateSchoolDataArr(word, value, schoolDataArr )
     } else {
       // ALL OTHER VALUES
       const splitPoint = word.search(/[a-z][A-Z]/)
@@ -88,14 +93,14 @@ const processGeneralData = async pdfPath => {
         variablesArr.some(variable => variable.includes(splitWord)) &&
         !variablesArr.includes(value)
       ) {
-        const columns = variables[splitWord]
-        const dataObject = { [columns]: value }
-        schoolDataArr.push(dataObject)
+        updateSchoolDataArr(splitWord, value, schoolDataArr)
       }
     }
   }
 
   return schoolDataArr
 }
+
+
 
 export default processGeneralData
