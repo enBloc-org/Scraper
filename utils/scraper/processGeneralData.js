@@ -24,16 +24,16 @@ export const getPDFText = async pdfPath => {
   const parsedpdf = await parseDocument(pdfPath)
   const pdftext = parsedpdf.text
   const all = pdftext.split("\n")
-  return all 
+  return all
 }
 
 export const getUdiseValue = data => {
   const regex = new RegExp(/UDISE CODE(.*?)School Name/g)
-  const match = regex.exec(data[3]) 
+  const match = regex.exec(data[3])
   if (match && match[1]) {
     return match[1].trim()
-  } 
-    return "*"
+  }
+  return "*"
 }
 
 export const getNameValue = filePath => {
@@ -42,12 +42,10 @@ export const getNameValue = filePath => {
     .basename(filePath)
     .replace(/[.pdf]/g, "")
     .replace(/(2018-19)|(2019-20)|(2020-21)|(2021-22)|(2022-23)_/g, "")
-    // .match(/_+(.+)/)
-    console.log("file base title", fileBaseTitle)
+    .match(/_+(.+)/)
   const schoolName = fileBaseTitle[1].replace(/-/g, " ")
   return schoolName.trim()
 }
-
 
 export const getYearValue = filePath => {
   const yearRegex = /(2018-19)|(2019-20)|(2020-21)|(2021-22)|(2022-23)/
@@ -65,7 +63,6 @@ const updateSchoolDataArr = (word, value, array) => {
 export const processGeneralData = async pdfPath => {
   const schoolDataArr = []
   const all = await getPDFText(pdfPath)
-
 
   for (let i = 0; i < all.length; i++) {
     const word = all[i]
@@ -97,6 +94,3 @@ export const processGeneralData = async pdfPath => {
 
   return schoolDataArr
 }
-
-
-
