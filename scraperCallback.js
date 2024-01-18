@@ -19,9 +19,8 @@ const iterateScraper = async () => {
   let totalProcessed = 0
 
   for (let index = 0; index < pathsList.length; index++) {
-    console.log(pathsList[index])
     if (!pathsList[index].includes(".DS_Store")) {
-      try { 
+      try {
         await new Promise(async resolve => {
           const trigger = await scraper(pathsList[index])
           resolve(trigger)
