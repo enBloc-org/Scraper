@@ -1,6 +1,6 @@
 import { readFileSync } from "fs"
 import path from "path"
-import pdf from "pdf-parse"
+import pdf from "pdf-parse/lib/pdf-parse.js"
 import variables from "./variables.js"
 
 const variablesArr = Object.keys(variables)
@@ -20,8 +20,15 @@ const parseDocument = async pdfPath => {
   }
 }
 
-const extractValue = (data, regexPattern) => {
-  const regex = new RegExp(regexPattern)
+export const getPDFText = async pdfPath => {
+  const parsedpdf = await parseDocument(pdfPath)
+  const pdftext = parsedpdf.text
+  const all = pdftext.split("\n")
+  return all 
+}
+
+export const getUdiseValue = data => {
+  const regex = new RegExp(/UDISE CODE(.*?)School Name/g)
   const match = regex.exec(data[3]) 
   if (match && match[1]) {
     return match[1].trim()
@@ -29,17 +36,20 @@ const extractValue = (data, regexPattern) => {
     return "*"
 }
 
-const getNameValue = filePath => {
+export const getNameValue = filePath => {
+  console.log(filePath)
   const fileBaseTitle = path
     .basename(filePath)
     .replace(/[.pdf]/g, "")
     .replace(/(2018-19)|(2019-20)|(2020-21)|(2021-22)|(2022-23)_/g, "")
-    .match(/_+(.+)/)
+    // .match(/_+(.+)/)
+    console.log("file base title", fileBaseTitle)
   const schoolName = fileBaseTitle[1].replace(/-/g, " ")
   return schoolName.trim()
 }
 
-const getYearValue = filePath => {
+
+export const getYearValue = filePath => {
   const yearRegex = /(2018-19)|(2019-20)|(2020-21)|(2021-22)|(2022-23)/
   const fileBaseTitle = path.basename(filePath)
 
@@ -52,21 +62,10 @@ const updateSchoolDataArr = (word, value, array) => {
   array.push(dataObject)
 }
 
-const processGeneralData = async pdfPath => {
+export const processGeneralData = async pdfPath => {
   const schoolDataArr = []
-  const parsedpdf = await parseDocument(pdfPath)
-  const pdftext = parsedpdf.text
+  const all = await getPDFText(pdfPath)
 
-  const all = pdftext.split("\n")
-
-  // UDISE CODE and SCHOOL NAME and YEAR
-  const udiseRegex = /UDISE CODE(.*?)School Name/g
-
-  const udise_code = { udise_code: extractValue(all, udiseRegex) }
-  const schoolname = { schoolname: getNameValue(pdfPath) }
-  const year = { year: getYearValue(pdfPath) }
-
-  schoolDataArr.push(udise_code, schoolname, year)
 
   for (let i = 0; i < all.length; i++) {
     const word = all[i]
@@ -99,4 +98,5 @@ const processGeneralData = async pdfPath => {
   return schoolDataArr
 }
 
-export default processGeneralData
+
+
