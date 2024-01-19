@@ -1,12 +1,9 @@
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs"
 import { toilets, rte, ews, enrolment_and_minority } from "./coordinates.js"
 
-
 const parsePage = async (pdf, pageNumber) => {
   return pdf.getPage(pageNumber).then(page => page.getTextContent())
 }
-
-
 
 const processColumn = (item, gradeData, grade, row) => {
   for (const col in gradeData) {
@@ -54,17 +51,43 @@ const processItem = (item, obj) => {
   return results
 }
 
+const getUdiseValue = async pdf => {
+  const loadingTask = getDocument(pdf)
+  const pdfDocument = await loadingTask.promise
+
+  const maxPages = pdfDocument.numPages
+  const pageTexts = []
+
+  for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
+    const page = await pdfDocument.getPage(pageNum)
+    const textContent = await page.getTextContent()
+    const pageText = textContent.items.map(item => item.str).join(" ")
+    pageTexts.push(pageText)
+  }
+
+  const allText = pageTexts.join("\n")
+
+  const regex = new RegExp(/UDISE CODE:? (.*?) ?School Name:?/g)
+  const match = regex.exec(allText)
+  if (match && match[1]) {
+    return (match[1].trim())
+  }
+}
 
 
+const createObject = async pdf => {
+  
+  const loadingTask = getDocument(pdf)
+  const pdfDocument = await loadingTask.promise
+  const page1 = await parsePage(pdfDocument, 1)
+  const page2 = await parsePage(pdfDocument, 2)
 
-const createObject = (page1, page2) => {
   const items1 = page1.items.map(item => ({
     text: item.str,
     x: item.transform[4], // x-coordinate
     y: item.transform[5], // y-coordinate
   }))
 
-  
   const toilet_results = items1.flatMap(item => processItem(item, toilets))
   const rte_results = items1.flatMap(item => processItem(item, rte))
   const ews_results = items1.flatMap(item => processItem(item, ews))
@@ -74,7 +97,6 @@ const createObject = (page1, page2) => {
     x: item.transform[4], // x-coordinate
     y: item.transform[5], // y-coordinate
   }))
-
 
   const en_min_results = items2.flatMap(item =>
     processItem(item, enrolment_and_minority),
@@ -87,48 +109,32 @@ const createObject = (page1, page2) => {
     ...en_min_results,
   ]
 
+
   const allTableData = results.reduce((acc, { key, value }) => {
     acc[key] = value
     return acc
   }, {})
 
+
+
+  const udise_code = await getUdiseValue(pdf);
+  allTableData.udise_code = udise_code;
+
+  console.log("allTableData: ", allTableData)
+
   return allTableData
 }
 
+
+// export const udise_code = { udise_code: await getUdiseValue(pdf)}
+
 const processTableData = async pdf => {
   try {
-    const loadingTask = getDocument(pdf)
-    const pdfDocument = await loadingTask.promise
-
-    const maxPages = pdfDocument.numPages;
-    const pageTexts = [];
-
-    for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
-        const page = await pdfDocument.getPage(pageNum);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items.map(item => item.str).join(' ');
-        pageTexts.push(pageText);
-    }
-
-    const allText = pageTexts.join('\n')
-
-    const regex = new RegExp(/UDISE CODE:? (.*?) ?School Name:?/g)
-    const match = regex.exec(allText);
-    if (match && match[1]) {
-      console.log(match[1].trim())
-    }
-
-  
 
 
-    const parsedPage1 = await parsePage(pdfDocument, 1)
-
-    const parsedPage2 = await parsePage(pdfDocument, 2)
-
-    const allTableData = createObject(parsedPage1, parsedPage2)
-
-
+    const allTableData = createObject(pdf)
     return allTableData
+    
   } catch (err) {
     console.error(`Error: ${err}`)
   }
