@@ -70,13 +70,11 @@ const getUdiseValue = async pdf => {
   const regex = new RegExp(/UDISE CODE:? (.*?) ?School Name:?/g)
   const match = regex.exec(allText)
   if (match && match[1]) {
-    return (match[1].trim())
+    return match[1].trim()
   }
 }
 
-
 const createObject = async pdf => {
-  
   const loadingTask = getDocument(pdf)
   const pdfDocument = await loadingTask.promise
   const page1 = await parsePage(pdfDocument, 1)
@@ -109,32 +107,21 @@ const createObject = async pdf => {
     ...en_min_results,
   ]
 
-
   const allTableData = results.reduce((acc, { key, value }) => {
     acc[key] = value
     return acc
   }, {})
 
-
-
-  const udise_code = await getUdiseValue(pdf);
-  allTableData.udise_code = udise_code;
-
-  console.log("allTableData: ", allTableData)
+  const udise_code = await getUdiseValue(pdf)
+  allTableData.udise_code = udise_code
 
   return allTableData
 }
 
-
-// export const udise_code = { udise_code: await getUdiseValue(pdf)}
-
 const processTableData = async pdf => {
   try {
-
-
     const allTableData = createObject(pdf)
     return allTableData
-    
   } catch (err) {
     console.error(`Error: ${err}`)
   }
