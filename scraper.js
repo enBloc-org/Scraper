@@ -1,9 +1,13 @@
-import { processGeneralData, getNameValue, getYearValue } from "./utils/scraper/processGeneralData.js"
+import {
+  processGeneralData,
+  getNameValue,
+  getYearValue,
+} from "./utils/scraper/processGeneralData.js"
 import processTableData from "./utils/scraper/processTableData.js"
 import insertSchoolData from "./model/school_data.js"
 
 const scraper = async pdfPath => {
-  // CORE VALUES
+  // SCHOOL NAME AND YEAR VALUES
   const schoolname = { schoolname: getNameValue(pdfPath) }
   const year = { year: getYearValue(pdfPath) }
 
