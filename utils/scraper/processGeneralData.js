@@ -27,22 +27,12 @@ export const getPDFText = async pdfPath => {
   return all
 }
 
-export const getUdiseValue = data => {
-  const regex = new RegExp(/UDISE CODE(.*?)School Name/g)
-  const match = regex.exec(data[3])
-  if (match && match[1]) {
-    return match[1].trim()
-  }
-  return "*"
-}
-
 export const getNameValue = filePath => {
-  console.log(filePath)
   const fileBaseTitle = path
     .basename(filePath)
     .replace(/[.pdf]/g, "")
     .replace(/(2018-19)|(2019-20)|(2020-21)|(2021-22)|(2022-23)_/g, "")
-    .match(/_+(.+)/)
+  .match(/_+(.+)/)
   const schoolName = fileBaseTitle[1].replace(/-/g, " ")
   return schoolName.trim()
 }
