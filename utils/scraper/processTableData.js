@@ -71,6 +71,8 @@ const getUdiseValue = async pdf => {
   const match = regex.exec(allText)
   if (match && match[1]) {
     return match[1].trim()
+  } else {
+    return "*"
   }
 }
 
