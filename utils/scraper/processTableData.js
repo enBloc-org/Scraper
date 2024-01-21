@@ -1,12 +1,8 @@
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs"
 import { toilets, rte, ews, enrolment_and_minority } from "./coordinates.js"
 
-const parsePage1 = async pdf => {
-  return pdf.getPage(1).then(page => page.getTextContent())
-}
-
-const parsePage2 = async pdf => {
-  return pdf.getPage(2).then(page => page.getTextContent())
+const parsePage = async (pdf, pageNumber) => {
+  return pdf.getPage(pageNumber).then(page => page.getTextContent())
 }
 
 const processColumn = (item, gradeData, grade, row) => {
@@ -55,7 +51,37 @@ const processItem = (item, obj) => {
   return results
 }
 
-const createObject = (page1, page2) => {
+const getUdiseValue = async pdf => {
+  const loadingTask = getDocument(pdf)
+  const pdfDocument = await loadingTask.promise
+
+  const maxPages = pdfDocument.numPages
+  const pageTexts = []
+
+  for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
+    const page = await pdfDocument.getPage(pageNum)
+    const textContent = await page.getTextContent()
+    const pageText = textContent.items.map(item => item.str).join(" ")
+    pageTexts.push(pageText)
+  }
+
+  const allText = pageTexts.join("\n")
+
+  const regex = new RegExp(/UDISE CODE:? (.*?) ?School Name:?/g)
+  const match = regex.exec(allText)
+  if (match && match[1]) {
+    return match[1].trim()
+  } else {
+    return "*"
+  }
+}
+
+const createObject = async pdf => {
+  const loadingTask = getDocument(pdf)
+  const pdfDocument = await loadingTask.promise
+  const page1 = await parsePage(pdfDocument, 1)
+  const page2 = await parsePage(pdfDocument, 2)
+
   const items1 = page1.items.map(item => ({
     text: item.str,
     x: item.transform[4], // x-coordinate
@@ -88,19 +114,15 @@ const createObject = (page1, page2) => {
     return acc
   }, {})
 
+  const udise_code = await getUdiseValue(pdf)
+  allTableData.udise_code = udise_code
+
   return allTableData
 }
 
 const processTableData = async pdf => {
   try {
-    const loadingTask = getDocument(pdf)
-    const pdfDocument = await loadingTask.promise
-
-    const parsedPage1 = await parsePage1(pdfDocument)
-    const parsedPage2 = await parsePage2(pdfDocument)
-
-    const allTableData = createObject(parsedPage1, parsedPage2)
-
+    const allTableData = createObject(pdf)
     return allTableData
   } catch (err) {
     console.error(`Error: ${err}`)
