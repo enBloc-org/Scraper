@@ -19,18 +19,20 @@ const iterateScraper = async () => {
   let totalProcessed = 0
 
   for (let index = 0; index < pathsList.length; index++) {
-    try {
-      await new Promise(async resolve => {
-        const trigger = await scraper(pathsList[index])
-        resolve(trigger)
-      })
-      totalProcessed++
-    } catch (error) {
-      console.error(
-        errorLogColour,
-        `Error scraping ${pathsList[index]}: ${error}`,
-      )
-      throw error
+    if (!pathsList[index].includes(".DS_Store")) {
+      try {
+        await new Promise(async resolve => {
+          const trigger = await scraper(pathsList[index])
+          resolve(trigger)
+        })
+        totalProcessed++
+      } catch (error) {
+        console.error(
+          errorLogColour,
+          `Error scraping ${pathsList[index]}: ${error}`,
+        )
+        throw error
+      }
     }
   }
 
