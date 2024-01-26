@@ -79,8 +79,14 @@ const getUdiseValue = async pdf => {
 const createObject = async pdf => {
   const loadingTask = getDocument(pdf)
   const pdfDocument = await loadingTask.promise
-  const page1 = await parsePage(pdfDocument, 1)
-  const page2 = await parsePage(pdfDocument, 2)
+
+  let page1, page2
+  try {
+    page1 = await parsePage(pdfDocument, 1)
+    page2 = await parsePage(pdfDocument, 2)
+  } catch (error) {
+    page1 = await parsePage(pdfDocument, 2)
+  }
 
   const items1 = page1.items.map(item => ({
     text: item.str,

@@ -12,12 +12,25 @@ const scraper = async pdfPath => {
   const year = { year: getYearValue(pdfPath) }
 
   // GENERAL VALUES
-  const pdfSchoolData = await processGeneralData(pdfPath)
+  let pdfSchoolData = []
+
+  try {
+  pdfSchoolData = await processGeneralData(pdfPath)
+  } catch (error){
+    console.error(error)
+  }
 
   // UDISE AND TABLE VALUES
-  const tableData = await processTableData(pdfPath)
+  let tableData
+  try {
+  tableData = await processTableData(pdfPath)
+  pdfSchoolData.push(tableData)
+  } catch (error){
+    console.log({tableData})
+    console.error(error)
+  }
 
-  pdfSchoolData.push(schoolname, year, tableData)
+  pdfSchoolData.push(schoolname, year)
 
   insertSchoolData(pdfSchoolData)
 

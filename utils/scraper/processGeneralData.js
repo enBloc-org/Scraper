@@ -22,9 +22,7 @@ const parseDocument = async pdfPath => {
 
 export const getPDFText = async pdfPath => {
   const parsedpdf = await parseDocument(pdfPath)
-  const pdftext = parsedpdf.text
-  const all = pdftext.split("\n")
-  return all
+  return parsedpdf.text.split("\n")
 }
 
 export const getNameValue = filePath => {
@@ -32,9 +30,8 @@ export const getNameValue = filePath => {
     .basename(filePath)
     .replace(/[.pdf]/g, "")
     .replace(/(2018-19)|(2019-20)|(2020-21)|(2021-22)|(2022-23)_/g, "")
-  .match(/_+(.+)/)
-  const schoolName = fileBaseTitle[1].replace(/-/g, " ")
-  return schoolName.trim()
+    .match(/_+(.+)/)
+  return fileBaseTitle[1].replace(/-/g, " ").trim()
 }
 
 export const getYearValue = filePath => {
@@ -52,11 +49,10 @@ const updateSchoolDataArr = (word, value, array) => {
 
 export const processGeneralData = async pdfPath => {
   const schoolDataArr = []
-  const all = await getPDFText(pdfPath)
+  const words = await getPDFText(pdfPath)
 
-  for (let i = 0; i < all.length; i++) {
-    const word = all[i]
-    const value = all[i + 1]
+  words.forEach((word, i) => {
+    const value = words[i + 1]
 
     // DIGIBOARD
     if (
@@ -65,7 +61,7 @@ export const processGeneralData = async pdfPath => {
     ) {
       updateSchoolDataArr(word, value, schoolDataArr)
     } else {
-      // ALL OTHER VALUES
+      // words OTHER VALUES
       const splitPoint = word.search(/[a-z][A-Z]/)
       let splitWord = word.replace(/[^a-zA-Z0-9\s-/?.()]/g, "")
 
@@ -80,7 +76,7 @@ export const processGeneralData = async pdfPath => {
         updateSchoolDataArr(splitWord, value, schoolDataArr)
       }
     }
-  }
+  })
 
   return schoolDataArr
 }
