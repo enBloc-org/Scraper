@@ -78,7 +78,10 @@ const getUdiseValue = async pdf => {
 
 const createObject = async pdf => {
   const loadingTask = getDocument(pdf)
-  const pdfDocument = await loadingTask.promise
+  const pdfDocument = loadingTask.promise.catch(error => {
+    console.log("Poop")
+    throw error
+  })
 
   let page1, page2
   try {
