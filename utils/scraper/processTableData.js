@@ -54,13 +54,33 @@ const processItem = (item, obj) => {
 const getUdiseValue = async pdf => {
   const loadingTask = getDocument(pdf)
   const pdfDocument = await loadingTask.promise
+    .then(result => {
+      return result
+    })
+    .catch(error => {
+      throw error
+    })
 
   const maxPages = pdfDocument.numPages
   const pageTexts = []
 
   for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
-    const page = await pdfDocument.getPage(pageNum)
-    const textContent = await page.getTextContent()
+    const page = await pdfDocument
+      .getPage(pageNum)
+      .then(result => {
+        return result
+      })
+      .catch(error => {
+        throw error
+      })
+    const textContent = await page
+      .getTextContent()
+      .then(result => {
+        return result
+      })
+      .catch(error => {
+        throw error
+      })
     const pageText = textContent.items.map(item => item.str).join(" ")
     pageTexts.push(pageText)
   }
@@ -78,9 +98,14 @@ const getUdiseValue = async pdf => {
 
 const createObject = async pdf => {
   const loadingTask = getDocument(pdf)
-  const pdfDocument = loadingTask.promise.catch(error => {
-    throw error
-  })
+  const pdfDocument = await loadingTask.promise
+    .then(result => {
+      return result
+    })
+    .catch(error => {
+      // adding await breaks it ?!?!?
+      throw error
+    })
 
   let page1, page2
   try {
