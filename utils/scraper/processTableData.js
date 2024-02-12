@@ -1,39 +1,40 @@
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs"
 import { toilets, rte, ews, enrolment_and_minority } from "./coordinates.js"
 
-import muhammara from "muhammara";
+import muhammara from "muhammara"
 
 function logPdfInfo(pdfPath) {
-    let pdfReader;
+  let pdfReader
 
-    try {
-        pdfReader = muhammara.createReader(pdfPath);
-    } catch (e) {
-        console.error("Error opening PDF file:", e);
-        return;
-    }
+  try {
+    pdfReader = muhammara.createReader(pdfPath)
+  } catch (e) {
+    console.error("Error opening PDF file:", e)
+    return
+  }
 
-    const pdfLevel = pdfReader.getPDFLevel();
-    const pagesCount = pdfReader.getPagesCount();
-    const isEncrypted = pdfReader.isEncrypted();
-    const objectsCount = pdfReader.getObjectsCount();
-    const xrefSize = pdfReader.getXrefSize();
-    const xrefPosition = pdfReader.getXrefPosition();
+  const pdfLevel = pdfReader.getPDFLevel()
+  const pagesCount = pdfReader.getPagesCount()
+  const isEncrypted = pdfReader.isEncrypted()
+  const objectsCount = pdfReader.getObjectsCount()
+  const xrefSize = pdfReader.getXrefSize()
+  const xrefPosition = pdfReader.getXrefPosition()
 
-    const pdfInfo = {
-        PDFLevel: pdfLevel,
-        PagesCount: pagesCount,
-        IsEncrypted: isEncrypted,
-        ObjectsCount: objectsCount,
-        XrefSize: xrefSize,
-        XrefPosition: xrefPosition
-    };
+  const pdfInfo = {
+    PDFLevel: pdfLevel,
+    PagesCount: pagesCount,
+    IsEncrypted: isEncrypted,
+    ObjectsCount: objectsCount,
+    XrefSize: xrefSize,
+    XrefPosition: xrefPosition,
+  }
 
-    console.log("PDF Information:", pdfInfo);
+  console.log("PDF Information:", pdfInfo)
 }
 
-
-logPdfInfo('/Users/eazzopardi/code/agency/agency-scraper/2022-23_CurrentSchool.pdf') //normal
+logPdfInfo(
+  "/Users/eazzopardi/code/agency/agency-scraper/2022-23_CurrentSchool.pdf",
+) //normal
 // logPdfInfo(muhammara.createReader("/Users/eazzopardi/code/agency/agency-scraper/1000052_2019-20_Noori-Irfan-Educational-Institute-Pulwamar.pdf")) //deprecated but appears fine in vscode
 // logPdfInfo(muhammara.createReader("/Users/eazzopardi/code/agency/agency-scraper/1203410_2022-23_LAYALPUR-KHALSA-COLLEGIATE-SEN.SEC-SCHOOL.pdf")) //deprecated and only shows second page
 
