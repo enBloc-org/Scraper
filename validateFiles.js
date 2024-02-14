@@ -5,41 +5,48 @@ import { parseDocument } from "./utils/scraper/processGeneralData.js"
 import { bgLogColour, errorLogColour } from "./utils/colours.js"
 
 const __dirname = new URL(".", import.meta.url).pathname
-const targetFolder = path.resolve(__dirname, "./utils/converter/downloads")
-const targetFiles = fs.readdirSync(targetFolder)
 
-const pathsList = targetFiles.map(file => path.join(targetFolder, file))
+const originalFolder = path.resolve(__dirname, "./utils/converter/downloads")
+const originalFiles = fs.readdirSync(originalFolder)
+const originalPathsList = originalFiles.map(file => path.join(originalFolder, file))
 
-// pdf parse library can identify and catch some errors, but not the ones that break pdf-dist. These files contain no text \n\n and therefore do not break pdf parse. These are now being logged as "corrupted pdf"
+const targetFolder = path.resolve(__dirname, "./utils/converter/corrupted_downloads")
 
 const checkPdfContents = async pdfpath => {
   const pdfdata = await parseDocument(pdfpath)
   const pdftext = pdfdata.text
   if (pdftext === "\n\n") {
+    const corruptedFilePath = path.join(targetFolder, path.basename(pdfpath))
+    console.log(corruptedFilePath)
     console.log(errorLogColour, "corrupted pdf")
-  } else console.log(bgLogColour, "valid pdf")
+    fs.renameSync(pdfpath, corruptedFilePath)
+    } else {
+        console.log(bgLogColour, "valid pdf")
+    }
 }
 
-// checkPdfContents('/Users/eazzopardi/code/agency/agency-scraper/1203410_2022-23_LAYALPUR-KHALSA-COLLEGIATE-SEN.SEC-SCHOOL.pdf') // broken pdf
-
 const validateFiles = async () => {
-  if (pathsList.length === 0) {
-    console.log(errorLogColour, "No files available to validate")
-    return
-  }
+    const corrupted_downloadsDir = path.join(__dirname, "utils", "converter", "corrupted_downloads")
+    if (!fs.existsSync(corrupted_downloadsDir)) {
+    fs.mkdirSync(corrupted_downloadsDir)
+    }
+    if (originalPathsList.length === 0) {
+        console.log(errorLogColour, "No files available to validate")
+        return
+    }
 
   let totalProcessed = 0
 
-  for (let index = 0; index < pathsList.length; index++) {
-    if (!pathsList[index].includes(".DS_Store")) {
+  for (let index = 0; index < originalPathsList.length; index++) {
+    if (!originalPathsList[index].includes(".DS_Store")) {
       try {
-        await checkPdfContents(pathsList[index])
+        await checkPdfContents(originalPathsList[index])
         totalProcessed++
         console.log(totalProcessed)
       } catch (error) {
         console.error(
           errorLogColour,
-          `Error scraping ${pathsList[index]}: ${error}`,
+          `Error scraping ${originalPathsList[index]}: ${error}`,
         )
       }
     }
@@ -47,6 +54,5 @@ const validateFiles = async () => {
 
   console.log(bgLogColour, `${totalProcessed} files validated`)
 }
-
 
 validateFiles()
