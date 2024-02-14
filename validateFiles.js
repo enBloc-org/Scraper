@@ -10,12 +10,14 @@ const targetFiles = fs.readdirSync(targetFolder)
 
 const pathsList = targetFiles.map(file => path.join(targetFolder, file))
 
+// pdf parse library can identify and catch some errors, but not the ones that break pdf-dist. These files contain no text \n\n and therefore do not break pdf parse. These are now being logged as "corrupted pdf"
+
 const checkPdfContents = async pdfpath => {
-    const pdfdata = await parseDocument(pdfpath)
-    const pdftext = pdfdata.text
-    if (pdftext === '\n\n'){
-        console.log(errorLogColour, "corrupted pdf")
-    } else console.log(bgLogColour, "valid pdf")
+  const pdfdata = await parseDocument(pdfpath)
+  const pdftext = pdfdata.text
+  if (pdftext === "\n\n") {
+    console.log(errorLogColour, "corrupted pdf")
+  } else console.log(bgLogColour, "valid pdf")
 }
 
 // checkPdfContents('/Users/eazzopardi/code/agency/agency-scraper/1203410_2022-23_LAYALPUR-KHALSA-COLLEGIATE-SEN.SEC-SCHOOL.pdf') // broken pdf
@@ -31,12 +33,10 @@ const validateFiles = async () => {
   for (let index = 0; index < pathsList.length; index++) {
     if (!pathsList[index].includes(".DS_Store")) {
       try {
-        await
-          checkPdfContents(pathsList[index])
-          totalProcessed++
-          console.log(totalProcessed)
-        }
-        catch (error) {
+        await checkPdfContents(pathsList[index])
+        totalProcessed++
+        console.log(totalProcessed)
+      } catch (error) {
         console.error(
           errorLogColour,
           `Error scraping ${pathsList[index]}: ${error}`,
@@ -47,5 +47,6 @@ const validateFiles = async () => {
 
   console.log(bgLogColour, `${totalProcessed} files validated`)
 }
+
 
 validateFiles()
