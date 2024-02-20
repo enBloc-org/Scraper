@@ -8,9 +8,14 @@ const __dirname = new URL(".", import.meta.url).pathname
 
 const originalFolder = path.resolve(__dirname, "./utils/converter/downloads")
 const originalFiles = fs.readdirSync(originalFolder)
-const originalPathsList = originalFiles.map(file => path.join(originalFolder, file))
+const originalPathsList = originalFiles.map(file =>
+  path.join(originalFolder, file),
+)
 
-const targetFolder = path.resolve(__dirname, "./utils/converter/corrupted_downloads")
+const targetFolder = path.resolve(
+  __dirname,
+  "./utils/converter/corrupted_downloads",
+)
 
 const checkPdfContents = async pdfpath => {
   const pdfdata = await parseDocument(pdfpath)
@@ -20,20 +25,25 @@ const checkPdfContents = async pdfpath => {
     console.log(corruptedFilePath)
     console.log(errorLogColour, "corrupted pdf")
     fs.renameSync(pdfpath, corruptedFilePath)
-    } else {
-        console.log(bgLogColour, "valid pdf")
-    }
+  } else {
+    console.log(bgLogColour, "valid pdf")
+  }
 }
 
 const validateFiles = async () => {
-    const corrupted_downloadsDir = path.join(__dirname, "utils", "converter", "corrupted_downloads")
-    if (!fs.existsSync(corrupted_downloadsDir)) {
+  const corrupted_downloadsDir = path.join(
+    __dirname,
+    "utils",
+    "converter",
+    "corrupted_downloads",
+  )
+  if (!fs.existsSync(corrupted_downloadsDir)) {
     fs.mkdirSync(corrupted_downloadsDir)
-    }
-    if (originalPathsList.length === 0) {
-        console.log(errorLogColour, "No files available to validate")
-        return
-    }
+  }
+  if (originalPathsList.length === 0) {
+    console.log(errorLogColour, "No files available to validate")
+    return
+  }
 
   let totalProcessed = 0
 
