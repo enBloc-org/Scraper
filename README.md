@@ -11,11 +11,13 @@ npm install
 ```
 
 ## Usage
-The code is designed to be run in four phases:
+The code is designed to be run in five phases:
 - **Crawl** the source page to collect all data endpoints needed 
 - **Download** the base64 files available at each endpoint
 - **Convert** each file to PDF
+- **validateFiles**
 - **Scrape** the data from those files
+
 
 ### Crawling
 `crawler.js` will navigate through all the necessary endpoints to assemble a large json file which can be iterated through by our scraper.
@@ -39,6 +41,10 @@ npm run download
 ```terminal
 npm run convert
 ```
+
+**validateFiles**
+
+Run ```node validateFiles.js``. This will check the files and send all files that don't meet the requirements to corrupted_downloads.
 
 ### Scraper
 *more info soon*

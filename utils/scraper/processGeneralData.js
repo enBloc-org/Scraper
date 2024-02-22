@@ -6,7 +6,7 @@ import variables from "./variables.js"
 const variablesArr = Object.keys(variables)
 variablesArr.push("Visit of school for / by")
 
-const parseDocument = async pdfPath => {
+export const parseDocument = async pdfPath => {
   const dataBuffer = readFileSync(pdfPath)
   const options = {
     max: 1,
@@ -16,6 +16,7 @@ const parseDocument = async pdfPath => {
     return pdfdata
   } catch (error) {
     console.error(error)
+    console.log("some error with pdf parse library")
     throw error
   }
 }
