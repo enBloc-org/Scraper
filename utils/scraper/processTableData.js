@@ -78,12 +78,6 @@ const getUdiseValue = async pdf => {
 
 const createObject = async pdf => {
   const loadingTask = getDocument(pdf)
-  const testlog = loadingTask._capability.promise
-  try {
-    console.log({ testlog })
-  } catch (error) {
-    console.log("could not be parsed", error)
-  }
   const pdfDocument = await loadingTask.promise
 
   let page1, page2
