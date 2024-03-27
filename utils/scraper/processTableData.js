@@ -56,7 +56,7 @@ const getUdiseValue = async pdf => {
   const pdfDocument = await loadingTask.promise
 
   const maxPages = pdfDocument.numPages
-  const pageTexts = []
+  const pageTexts = [] 
 
   for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
     const page = await pdfDocument.getPage(pageNum)
