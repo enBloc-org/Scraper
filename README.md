@@ -47,4 +47,4 @@ npm run convert
 Run ```node validateFiles.js``. This will check the files and send all files that don't meet the requirements to corrupted_downloads.
 
 ### Scraper
-*more info soon*
+*more info very soon*
