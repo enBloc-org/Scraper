@@ -1,8 +1,17 @@
 # Scraper
 
 ## Development Notes
-### Setting up your environment
+
 This project is not designed for deployment, however, it will set up a local database to be used in development. 
+
+### Prerequisites
+
+You must have Node.js and npm installed. To see if you already have Node.js and npm installed and check the installed version, run the following commands:
+
+```terminal
+node -v
+npm -v
+```
 
 Clone the repo
 ``` terminal
@@ -15,7 +24,7 @@ Intall all the dependencies with the command below.
 npm install
 ```
 
-Ensure you have included the necessary environment variables
+Enter your environment variables in `.env`
 ```terminal
 BASE_URL=
 COOKIE=
@@ -69,3 +78,7 @@ npm run scrape
 ```
 
 This will automatically create a school_data.sql database where the data from each PDF will be transferred to during the scraping process. After each PDF is scraped, you will see the word 'Scraped' appear in the terminal. You will also see ```Warning: fetchStandardFontData: failed to fetch file "LiberationSans-Bold.ttf" with "UnknownErrorException: The standard font "baseUrl" parameter must be specified, ensure that the "standardFontDataUrl" API parameter is provided.".``` This is a known issue and will not interfere with the scraping process.
+
+### Acknowledgments
+- Authored by [Alphonso](https://github.com/camelPhonso) and [Beth](https://github.com/eliazzo)
+- Funded by the University of Cambridge
