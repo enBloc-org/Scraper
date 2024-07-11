@@ -15,6 +15,14 @@ Intall all the dependencies with the command below.
 npm install
 ```
 
+Ensure you have included the necessary environment variables
+```terminal
+BASE_URL=
+COOKIE=
+DELAY=
+STATE_LIST=
+```
+
 ## Usage
 
 The code is designed to be run in five phases:
